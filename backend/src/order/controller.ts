@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../auth/model";
+import User from "../user/model";
 import { SWIGGY_ALL_ORDERS } from "../constants";
 import FoodItem, { IFoodItem } from "../foodItem/model";
 import axios from "../utils/axios";
@@ -70,11 +70,14 @@ const getBudgetPieValues = (items: IFoodItem[], monthlyBudget: Number) => {
   items.forEach(function (item) {
     spent += item.total;
   });
-  if (spent <= budget) {
-    return (spent / (spent + budget)) * 100;
-  } else {
-    return -1;
-  }
+  spent = Math.min(spent, budget);
+  return [
+    { type: "spent", value: spent },
+    {
+      type: "left",
+      value: budget - spent,
+    },
+  ];
 };
 
 export const getOrders = async (request: Request, response: Response) => {
@@ -172,10 +175,13 @@ export const getAndSaveOrders = async (
   }
   const foodItemIds = await FoodItem.insertMany(allItems);
   await User.updateOne(
-    { phone: phone },
+    { phone },
     {
       $push: {
         items: foodItemIds,
+      },
+      $set: {
+        isDataStored: true,
       },
     }
   );
@@ -186,19 +192,17 @@ export const getAndSaveOrders = async (
 
 export const getData = async (request: Request, response: Response) => {
   const { phone } = request.params;
-  const user = await User.findOne({ phone: phone })
-    .populate({ path: "items" })
-    .exec();
+  const user = await User.findOne({ phone }).populate({ path: "items" }).exec();
   const frequencyPerFoodName = getFrequencyPerFoodName(user.items);
   const monthlyData = getMonthlyData(user.items);
   const restaurantFrequency = getRestaurantFrequency(user.items);
-  const spent = getBudgetPieValues(user.items, user.budget);
+  const spentValues = getBudgetPieValues(user.items, user.budget);
   response.send({
     user,
     frequencyPerFoodName,
     monthlyData,
     restaurantFrequency,
-    spent,
+    spentValues,
   });
 };
 

@@ -16,26 +16,21 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
 import axios from "../Utils/axios";
 
-interface SignUpData {
-    username: string;
-    ph_num: string;
-    password: string;
-}
-
 export const Signup: React.FC<any> = () => {
-    const { register, handleSubmit } = useForm();
-    const setUsername = useStore((state) => state.setUsername);
-    const setPhno = useStore((state) => state.setPhoneNumber);
-    const setPwd = useStore((state) => state.setPassword);
-    const navigate = useNavigate();
-    const onSubmit = async (data: any) => {
-        console.log(data);
-        setUsername(data.username);
-        setPhno(data.phone);
-        setPwd(data.password);
-        await axios.post("/auth/signup", data);
-        navigate("/");
-    };
+  const { register, handleSubmit } = useForm();
+  const setUsername = useStore((state) => state.setUsername);
+  const setPhno = useStore((state) => state.setPhoneNumber);
+  const setPwd = useStore((state) => state.setPassword);
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+    setUsername(data.username);
+    setPhno(data.phone);
+    setPwd(data.password);
+    await axios.post("/auth/signup", data);
+    navigate("/");
+  };
 
     return (
         <>

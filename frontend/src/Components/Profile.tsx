@@ -9,8 +9,8 @@ import {
   Input,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import {useStore} from '../Store/store';
+import axios from "../Utils/axios";
+import { useStore } from "../Store/store";
 import { useForm } from "react-hook-form";
 import Auth from "./Auth";
 
@@ -30,10 +30,12 @@ const Profile: React.FC<profileProps> = () => {
     }
   };
 
-  const sendReq=async ()=>{
-      console.log(phno);
-      await axios.post("http://localhost:3530/otp/send",{'mobile':Number(phno)});
-  }
+  const sendReq = async () => {
+    console.log(phno);
+    await axios.post("/otp/send", {
+      phone: Number(phno),
+    });
+  };
 
   return (
     <Flex justify="center">
@@ -111,7 +113,10 @@ const Profile: React.FC<profileProps> = () => {
               borderRadius="lg"
               size="lg"
               my="2%"
-              onClick={()=>{sendReq();OnOpen()}}
+              onClick={() => {
+                sendReq();
+                OnOpen();
+              }}
               width="40%"
               backgroundColor="#FAFAFA"
               fontWeight="700"
@@ -134,7 +139,7 @@ const Profile: React.FC<profileProps> = () => {
             </Button>
           </Flex>
         </form>
-        <Auth isOpen={IsOpen} onClose={OnClose}/>
+        <Auth isOpen={IsOpen} onClose={OnClose} />
       </Box>
     </Flex>
   );
