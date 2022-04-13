@@ -1,10 +1,10 @@
 import { extendTheme } from "@chakra-ui/react";
 
-export const theme=extendTheme({
-    fonts:{
-        heading:'Noto Sans,Sans Serif',
-        body:'Noto Sans,Sans Serif'
-    }
+export const theme = extendTheme({
+  fonts: {
+    heading: "Raleway, sans-serif",
+    body: "Raleway, sans-serif",
+  },
 });
 
 export default theme;

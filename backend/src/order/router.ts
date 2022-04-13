@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getOrders } from "./controller";
+import { getAndSaveOrders, getData } from "./controller";
 
 const router = Router();
 
-router.get("/", getOrders);
+router.get("/:mobile", getData);
+router.post("/", getAndSaveOrders);
 
 export default router;
