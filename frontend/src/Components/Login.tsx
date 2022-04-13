@@ -30,10 +30,9 @@ const Login = () => {
         formState: { errors },
     } = useForm();
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
-    const setPhno = useStore((state) => state.setPhoneNumber);
     const onSubmit = async (data: any) => {
         setPhno(data.ph_num);
-        await axios.post("http://localhost:3530/auth/login", data);
+        //await axios.post("http://localhost:3530/auth/login", data.ph_num);
     };
 
     return (
@@ -57,7 +56,6 @@ const Login = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
-                            0
                             <FormControl id="phone" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
@@ -94,12 +92,12 @@ const Login = () => {
                                         Password
                                     </FormLabel>
                                     <Input
-                                        type="Input"
                                         mb="8"
                                         w={400}
                                         {...register("password")}
                                         flex={{ lg: "1", base: "none" }}
                                         name="password"
+                                        type='password'
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}

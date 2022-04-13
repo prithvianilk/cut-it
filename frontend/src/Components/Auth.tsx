@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useStoreState } from "easy-peasy";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -26,9 +27,9 @@ const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const closeModal = () => {
     onClose();
   };
-
+  //write the phone number to the store
   const onSubmit = async (data: any) => {
-
+      await axios.post('http://localhost:3530/otp/verify', data);
   }
 
   return (
@@ -49,13 +50,14 @@ const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             _focus={{ border: "none" }}
           />
           <ModalBody mt="-4">
-            <FormControl id="otp" my="5" isRequired>
+            <FormControl id="mobile" my="5" isRequired>
               <FormLabel fontWeight="medium" fontSize="lg">
                 Enter OTP
               </FormLabel>
               <Divider my="3" />
               <Input
                 type="Input"
+                {...register("mobile")}
                 w={400}
                 flex={{ lg: "1", base: "none" }}
                 name="otp"

@@ -23,9 +23,11 @@ const startSession = async (mobile: number) => {
 
 export const sendOTP = async (request: Request, response: Response) => {
   const { mobile } = request.body;
+  console.log(mobile);
   await startSession(mobile);
-  await requestOTP(mobile);
+  await requestOTP(mobile).catch((error: any) => {console.log(error)});
   response.send();
+  console.log("OTP sent");
 };
 
 export const verifyOTP = async (request: Request, response: Response) => {
