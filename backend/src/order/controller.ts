@@ -70,11 +70,14 @@ const getBudgetPieValues = (items: IFoodItem[], monthlyBudget: Number) => {
   items.forEach(function (item) {
     spent += item.total;
   });
-  if (spent <= budget) {
-    return (spent / (spent + budget)) * 100;
-  } else {
-    return -1;
-  }
+  spent = Math.min(spent, budget);
+  return [
+    { type: "spent", value: spent },
+    {
+      type: "left",
+      value: budget - spent,
+    },
+  ];
 };
 
 export const getOrders = async (request: Request, response: Response) => {
@@ -192,13 +195,13 @@ export const getData = async (request: Request, response: Response) => {
   const frequencyPerFoodName = getFrequencyPerFoodName(user.items);
   const monthlyData = getMonthlyData(user.items);
   const restaurantFrequency = getRestaurantFrequency(user.items);
-  const spent = getBudgetPieValues(user.items, user.budget);
+  const spentValues = getBudgetPieValues(user.items, user.budget);
   response.send({
     user,
     frequencyPerFoodName,
     monthlyData,
     restaurantFrequency,
-    spent,
+    spentValues,
   });
 };
 

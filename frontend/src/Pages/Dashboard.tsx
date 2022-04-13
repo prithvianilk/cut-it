@@ -1,6 +1,8 @@
-import { Box, Text } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
-import FoodBarChart, { IBarGraphData } from "../Components/FoodBarChart";
+import { Box } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import FoodBarChart from "../Components/BarChart";
+import PieChart from "../Components/PieChart";
+import { IGraphData } from "../Interfaces/GraphData";
 import axios from "../Utils/axios";
 
 interface DashBoardProps {}
@@ -8,20 +10,28 @@ interface DashBoardProps {}
 const DashBoard: React.FC<DashBoardProps> = () => {
   const mobile = 9113240914;
   const [isDone, setDone] = useState<boolean>(false);
-  const [frequentOrders, setFrequentOrders] = useState<IBarGraphData[]>([]);
-  const [monthlyData, setMonthlyData] = useState<IBarGraphData[]>([]);
-  const [restaurantFrequency, setrestaurantFrequency] = useState<
-    IBarGraphData[]
-  >([]);
+  const [frequentOrders, setFrequentOrders] = useState<IGraphData[]>([]);
+  const [monthlyData, setMonthlyData] = useState<IGraphData[]>([]);
+  const [restaurantFrequency, setRestaurantFrequency] = useState<IGraphData[]>(
+    []
+  );
+  const [spentValues, setSpentValues] = useState<IGraphData[]>([]);
 
   useEffect(() => {
     const getUserData = async () => {
       const { data } = await axios.get(`/order/${mobile}`);
-      const { user, frequencyPerFoodName, monthlyData, restaurantFrequency } =
-        data;
+      const {
+        user,
+        frequencyPerFoodName,
+        monthlyData,
+        restaurantFrequency,
+        spentValues,
+      } = data;
       setFrequentOrders(frequencyPerFoodName);
       setMonthlyData(monthlyData);
-      setrestaurantFrequency(restaurantFrequency);
+      setRestaurantFrequency(restaurantFrequency);
+      console.log(spentValues);
+      setSpentValues(spentValues);
     };
     getUserData();
     setDone(true);
@@ -32,6 +42,7 @@ const DashBoard: React.FC<DashBoardProps> = () => {
       <FoodBarChart data={frequentOrders} />
       <FoodBarChart data={restaurantFrequency} />
       <FoodBarChart data={monthlyData} />
+      <PieChart data={spentValues} />
     </Box>
   );
 };
