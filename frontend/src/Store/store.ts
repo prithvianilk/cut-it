@@ -1,22 +1,8 @@
-import { createStore,persist } from "easy-peasy";
-import {setUser} from './actions';
+import create from 'zustand'
 
-const initStore={
-    user:{
-        phno:''
-    }
-}
-
-export default createStore(
-    persist(
-        {
-            user:{
-                ...initStore.user,
-                setUser
-            }
-        },
-        {
-            storage:'localStorage'
-        }
-    )
-);
+export const useStore = create((set:any) => ({
+  phoneNumber: null,
+  password: null,
+  setPhoneNumber: (phno:number) => set((state:any) => ({ phoneNumber: phno })),
+  setPassword: (pwd:string) => set((state:any) => ({ password: pwd })),
+}))

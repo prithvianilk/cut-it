@@ -4,6 +4,7 @@ import { PORT } from "./constants";
 import otpRouter from "./otp/router";
 import orderRouter from "./order/router";
 import authRouter from "./auth/router";
+import cors from 'cors';
 
 import mongoose from "mongoose";
 
@@ -22,6 +23,7 @@ mongoose
 	.catch((err) => console.log(err));
 
 const app = Express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/otp", otpRouter);

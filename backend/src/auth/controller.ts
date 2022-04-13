@@ -27,7 +27,6 @@ export const signup = async (request: any, response: Response) => {
 
 export const login = async (request: Request, response: Response) => {
   const { phone, password } = request.body;
-  console.log(phone,password);
   User.findOne({ phone, password }).then((user) => {
     if (!user) return response.status(400).json({ msg: "User does not exist" });
 

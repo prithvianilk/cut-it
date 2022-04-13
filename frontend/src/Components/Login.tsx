@@ -1,5 +1,3 @@
-import React from "react";
-import Auth from "./Auth";
 import {
   Box,
   Flex,
@@ -15,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import axios from  "axios";
 import { Controller, useForm } from 'react-hook-form';
-import { useStoreActions, useStoreState } from "easy-peasy";
+import {useStore} from "../Store/store";
 
 interface LoginData {
   phone: string;
@@ -26,9 +24,11 @@ const Login = () => {
 //   const { phno } = useStoreState((state: any) => state.phno);
   const { register, handleSubmit, control,formState:{errors} } = useForm();
 //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
-  const onSubmit = async (data: any) => {
-      await axios.post("http://localhost:3530/auth/signup",data);
-  };
+const setPhno = useStore((state) => state.setPhoneNumber);
+const onSubmit = async (data: any) => {
+    setPhno(data.ph_num);
+    await axios.post("http://localhost:3530/auth/login", data);
+};
 
   return (
     <>
