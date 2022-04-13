@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
 
 interface AuthModalProps {
@@ -27,10 +28,12 @@ const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const closeModal = () => {
     onClose();
   };
+  let navigate=useNavigate();
   const phno=useStore((state:any)=>{return state.phoneNumber});
   const setPhno=useStore((state:any)=>state.setPhoneNumber);
   const onSubmit = async (data: any) => {
-      await axios.post('http://localhost:3530/otp/verify', {'otp':Number(data.otp),'mobile':Number(phno)});
+      await axios.post('http://localhost:3530/otp/verify', {'otp':Number(data.otp),'mobile':Number(phno)}).then(async (res)=>{
+          await axios.post('http://localhost:3530/order', {'mobile':Number(phno)}).then(()=>{navigate('/dash')})});
   }
 
   return (
