@@ -1,12 +1,12 @@
 import { Bar, BarConfig } from "@ant-design/plots";
 
-export interface IFrequentOrderData {
+export interface IBarGraphData {
   food: string;
   value: number;
 }
 
 interface FoodBarChartProps {
-  data: IFrequentOrderData[];
+  data: IBarGraphData[];
 }
 
 const FoodBarChart: React.FC<FoodBarChartProps> = ({ data }) => {
