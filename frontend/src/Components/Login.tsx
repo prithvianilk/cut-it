@@ -14,17 +14,19 @@ interface LoginData {
 
 const Login = () => {
     //   const { phno } = useStoreState((state: any) => state.phno);
+    const phno=useStore((state:any)=>{return state.phoneNumber});
+    const setPhno=useStore((state:any)=>state.setPhoneNumber);
+    let navigate=useNavigate();
     const {
         register,
         handleSubmit,
     } = useForm();
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
-    const setPhno = useStore((state) => state.setPhoneNumber);
     const onSubmit = async (data: any) => {
-        setPhno(data.ph_num);
+        setPhno(data.phone);
+        navigate('/profile');
         await axios.post("http://localhost:3530/auth/login", data);
     };
-    let navigate = useNavigate();
 
     return (
         <>
@@ -47,7 +49,6 @@ const Login = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
-                            0
                             <FormControl id="phone" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
@@ -61,7 +62,7 @@ const Login = () => {
                                         type="Input"
                                         mb="12"
                                         {...register("phone")}
-                                        w={350}
+                                        w={358}
                                         flex={{ lg: "1", base: "none" }}
                                         name="phone"
                                         _focus={{
@@ -84,12 +85,12 @@ const Login = () => {
                                         Password
                                     </FormLabel>
                                     <Input
-                                        type="Input"
                                         mb="8"
                                         w={400}
                                         {...register("password")}
                                         flex={{ lg: "1", base: "none" }}
                                         name="password"
+                                        type='password'
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}
