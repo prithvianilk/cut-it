@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../auth/model";
+import User from "../user/model";
 import { SWIGGY_ALL_ORDERS } from "../constants";
 import FoodItem, { IFoodItem } from "../foodItem/model";
 import axios from "../utils/axios";

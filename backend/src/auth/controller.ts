@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import User from "./model";
+import User from "../user/model";
 
 export const signup = async (request: any, response: Response) => {
-  const {  username,phone, password } = request.body;
+  const { username, phone, password } = request.body;
 
   // Simple validation
   if (!phone || !password || !username) {
