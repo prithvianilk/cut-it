@@ -15,7 +15,26 @@ export const getOrders = async (request: Request, response: Response) => {
         Cookie: users.generate(mobile),
       },
     });
-    const { orders } = data;
+    const orders = data.orders.map(
+      ({
+        order_time,
+        restaurant_name,
+        restaurant_address,
+        order_items,
+      }: any) => ({
+        order_time,
+        restaurant_address,
+        restaurant_name,
+        order_items: order_items.map(
+          ({ is_veg, total, name, quantity }: any) => ({
+            is_veg,
+            total,
+            name,
+            quantity,
+          })
+        ),
+      })
+    );
     const currentNumberOfOrders = orders.length;
     if (currentNumberOfOrders === 0) {
       allOrdersSaved = true;

@@ -6,7 +6,6 @@ import {
   SWIGGY_SMS_OTP_URL,
 } from "../constants";
 import { users } from "../utils/values";
-//TODO must be persisted
 
 const startSession = async (mobile: number) => {
   try {
@@ -19,11 +18,6 @@ const startSession = async (mobile: number) => {
     const setCookieList = headers["set-cookie"];
     users.create(mobile, csrfToken);
     users.add(mobile, setCookieList);
-    console.log(setCookieList);
-    console.log(users.generate(mobile));
-    for (let i = 0; i < 10; ++i) {
-      console.log("-");
-    }
   }
 };
 
@@ -38,10 +32,6 @@ export const verifyOTP = async (request: Request, response: Response) => {
   const { otp, mobile } = request.body;
   const _csrf = users.getCsrf(mobile);
   const Cookie = users.generate(mobile);
-  console.log(_csrf, Cookie);
-  for (let i = 0; i < 10; ++i) {
-    console.log("*");
-  }
   const { data, headers } = await axios.post(
     SWIGGY_OTP_VERIFY_URL,
     {
@@ -55,12 +45,7 @@ export const verifyOTP = async (request: Request, response: Response) => {
     }
   );
   const setCookieList = headers["set-cookie"];
-  console.log(setCookieList);
   users.add(mobile, setCookieList);
-  console.log(users.generate(mobile));
-  for (let i = 0; i < 10; ++i) {
-    console.log("-");
-  }
   response.send({ data, headers });
 };
 
@@ -84,8 +69,4 @@ const requestOTP = async (mobile: number) => {
     `_guest_tid=${tid};`,
     `_device_id=${deviceId};`,
   ]);
-  console.log(users.generate(mobile));
-  for (let i = 0; i < 10; ++i) {
-    console.log("-");
-  }
 };
