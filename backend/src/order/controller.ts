@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
-import User from '../auth/model';
+import User from "../auth/model";
 import { SWIGGY_ALL_ORDERS } from "../constants";
 import FoodItem, { IFoodItem } from "../foodItem/model";
 import axios from "../utils/axios";
 import { users } from "../utils/values";
 
-export const getOrders = async (request: Request, response: Response) => {
+export const getAndSaveOrders = async (
+  request: Request,
+  response: Response
+) => {
   const { mobile } = request.body;
   let allOrdersSaved = false;
   let lastOrderId = "";
@@ -51,12 +54,45 @@ export const getOrders = async (request: Request, response: Response) => {
     }
   }
   const foodItemIds = await FoodItem.insertMany(allItems);
-  await User.updateOne({ phone: mobile }, { 
-    $push: {
-      items: foodItemIds
+  await User.updateOne(
+    { phone: mobile },
+    {
+      $push: {
+        items: foodItemIds,
+      },
     }
-   })
+  );
   response.send({
     allItems,
   });
+};
+
+export const getData = async (request: Request, response: Response) => {
+  const { mobile } = request.body;
+  const user = await User.findOne({ phone: mobile })
+    .populate({ path: "items" })
+    .exec();
+  const frequencyPerFoodName = getFrequencyPerFoodName(user.items);
+  response.send({ user, frequencyPerFoodName });
+};
+
+const getFrequencyPerFoodName = (foodItems: IFoodItem[]) => {
+  const frequencyPerFoodName: { [name: string]: number } = {};
+  for (const { name } of foodItems) {
+    if (frequencyPerFoodName[name]) {
+      frequencyPerFoodName[name] += 1;
+    } else {
+      frequencyPerFoodName[name] = 1;
+    }
+  }
+  return Object.keys(frequencyPerFoodName)
+    .sort(
+      (food1: string, food2: string) =>
+        frequencyPerFoodName[food2] - frequencyPerFoodName[food1]
+    )
+    .slice(0, 5)
+    .map((foodName) => ({
+      type: foodName,
+      value: frequencyPerFoodName[foodName],
+    }));
 };
