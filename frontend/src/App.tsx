@@ -5,6 +5,7 @@ import './App.css';
 import {ChakraProvider, ThemeProvider} from '@chakra-ui/react'
 import history from './history';
 import Login from './Components/Login';
+import Profile from './Components/Profile';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Router history={history}>
           <Switch>
             <Route path="/" exact component={Login}/>
+            <Route path="/profile" exact component={Profile}/>
           </Switch>
         </Router>
       </ChakraProvider>
