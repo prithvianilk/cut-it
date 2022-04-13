@@ -15,24 +15,18 @@ import { useForm } from "react-hook-form";
 import { useStore } from "../Store/store";
 import Auth from "./Auth";
 
-interface LoginData {
+interface SignUpData {
+	username: string;
     ph_num: string;
     password: string;
 }
 
-const Login: React.FC<LoginData> = () => {
+export const Signup: React.FC<SignUpData> = () => {
     const {
         register,
         handleSubmit,
-        control,
-        formState: { errors },
     } = useForm();
     const setPhno = useStore((state) => state.setPhoneNumber);
-    const {
-        isOpen: IsOpen,
-        onOpen: OnOpen,
-        onClose: OnClose,
-    } = useDisclosure();
 
     const onSubmit = async (data: any) => {
         setPhno(data.ph_num);
@@ -54,11 +48,33 @@ const Login: React.FC<LoginData> = () => {
                     px="35px"
                 >
                     <Text textAlign="center" fontSize="3xl" fontWeight="medium">
-                        Ladoo
+                        Sign Up
                     </Text>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
+                            <FormControl id="username" display="flex" isRequired>
+                                <Flex flexDirection="row">
+                                    <FormLabel
+                                        fontSize="18px"
+                                        display="flex"
+                                        justifyContent="center"
+                                    >
+                                        User Name
+                                    </FormLabel>
+                                    <Input
+                                        type="Input"
+                                        mb="12"
+                                        {...register("username")}
+                                        w={350}
+                                        flex={{ lg: "1", base: "none" }}
+                                        name="username"
+                                        _focus={{
+                                            border: "#F06575 solid 2px",
+                                        }}
+                                    />
+                                </Flex>
+                            </FormControl>
                             <FormControl id="ph_num" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
@@ -113,7 +129,6 @@ const Login: React.FC<LoginData> = () => {
                             borderRadius="lg"
                             size="lg"
                             width="25%"
-                            onClick={OnOpen}
                             type="submit"
                             backgroundColor="#FAFAFA"
                             fontWeight="700"
@@ -136,10 +151,7 @@ const Login: React.FC<LoginData> = () => {
                         </Button>
                     </form>
                 </Box>
-                <Auth isOpen={IsOpen} onClose={OnClose} />
             </Flex>
         </>
     );
 };
-
-export default Login;

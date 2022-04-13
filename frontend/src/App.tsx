@@ -1,21 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import {Route,Router,Switch} from 'react-router-dom';
-import './App.css';
-import {ChakraProvider, ThemeProvider} from '@chakra-ui/react'
-import history from './history';
-import Login from './Components/Login';
+import { ChakraProvider } from "@chakra-ui/react";
+import "./App.css";
+import { Routes } from "./Routes";
+import theme from "./themes";
 
 function App() {
-  return (
-      <ChakraProvider>
-        <Router history={history}>
-          <Switch>
-            <Route path="/" exact component={Login}/>
-          </Switch>
-        </Router>
-      </ChakraProvider>
-  );
+    return (
+        <ChakraProvider theme={theme}>
+            <Routes />
+        </ChakraProvider>
+    );
 }
 
 export default App;
