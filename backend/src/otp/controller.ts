@@ -7,7 +7,7 @@ import {
 } from "../constants";
 import { users } from "../utils/values";
 
-const startSession = async (mobile: number) => {
+const startSession = async (phone: number) => {
   try {
     await axios.get(SWIGGY_DAPI_URL);
     //TODO clean this code
@@ -16,24 +16,24 @@ const startSession = async (mobile: number) => {
     const { headers, data } = error.response;
     const { csrfToken } = data;
     const setCookieList = headers["set-cookie"];
-    users.create(mobile, csrfToken);
-    users.add(mobile, setCookieList);
+    users.create(phone, csrfToken);
+    users.add(phone, setCookieList);
   }
 };
 
 export const sendOTP = async (request: Request, response: Response) => {
-  const { mobile } = request.body;
-  console.log(mobile);
-  await startSession(mobile);
-  await requestOTP(mobile).catch((error: any) => {console.log(error)});
+  const { phone } = request.body;
+  console.log(phone);
+  await startSession(phone);
+  await requestOTP(phone).catch((error: any) => {console.log(error)});
   response.send();
   console.log("OTP sent");
 };
 
 export const verifyOTP = async (request: Request, response: Response) => {
-  const { otp, mobile } = request.body;
-  const _csrf = users.getCsrf(mobile);
-  const Cookie = users.generate(mobile);
+  const { otp, phone } = request.body;
+  const _csrf = users.getCsrf(phone);
+  const Cookie = users.generate(phone);
   const { data, headers } = await axios.post(
     SWIGGY_OTP_VERIFY_URL,
     {
@@ -47,25 +47,25 @@ export const verifyOTP = async (request: Request, response: Response) => {
     }
   );
   const setCookieList = headers["set-cookie"];
-  users.add(mobile, setCookieList);
+  users.add(phone, setCookieList);
   response.send({ data, headers });
 };
 
-const requestOTP = async (mobile: number) => {
+const requestOTP = async (phone: number) => {
   const { data } = await axios.post(
     SWIGGY_SMS_OTP_URL,
     {
-      mobile,
-      _csrf: users.getCsrf(mobile),
+      phone,
+      _csrf: users.getCsrf(phone),
     },
     {
       headers: {
-        Cookie: users.generate(mobile),
+        Cookie: users.generate(phone),
       },
     }
   );
   const { sid, tid, deviceId } = data;
-  users.add(mobile, [
+  users.add(phone, [
     `_tid=${tid};`,
     `_sid=${sid};`,
     `_guest_tid=${tid};`,
