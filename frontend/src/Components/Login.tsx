@@ -11,22 +11,23 @@ import {
   Stack,
   Button,
   useDisclosure,
+  Heading,
 } from "@chakra-ui/react";
+import axios from  "axios";
 import { Controller, useForm } from 'react-hook-form';
 import { useStoreActions, useStoreState } from "easy-peasy";
 
 interface LoginData {
-  ph_num: string;
+  phone: string;
   password: string;
 }
 
 const Login = () => {
-  const { phno } = useStoreState((state: any) => state.phno);
+//   const { phno } = useStoreState((state: any) => state.phno);
   const { register, handleSubmit, control,formState:{errors} } = useForm();
-  const {setPhno}=useStoreActions((actions:any)=>actions.phno);
-  const { isOpen: IsOpen, onOpen: OnOpen, onClose: OnClose } = useDisclosure();
+//   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
   const onSubmit = async (data: any) => {
-    // setPhno(data.ph_num);
+      await axios.post("http://localhost:3530/auth/signup",data);
   };
 
   return (
@@ -44,13 +45,13 @@ const Login = () => {
           my="200"
           px="35px"
         >
-          <Text textAlign="center" fontSize="3xl" fontWeight="medium">
+          <Heading mb="2" textAlign="center">
             Ladoo
-          </Text>
+          </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Divider marginBottom="10" />
-            <Stack spacing={4}>
-              <FormControl id="ph_num" display="flex" isRequired>
+            <Stack spacing={4}>0
+              <FormControl id="phone" display="flex" isRequired>
                 <Flex flexDirection="row">
                   <FormLabel
                     fontSize="18px"
@@ -62,10 +63,10 @@ const Login = () => {
                   <Input
                     type="Input"
                     mb="12"
-                    {...register("ph_num")}
+                    {...register("phone")}
                     w={350}
                     flex={{ lg: "1", base: "none" }}
-                    name="ph_num"
+                    name="phone"
                     _focus={{
                       border: "#F06575 solid 2px",
                     }}
@@ -83,7 +84,7 @@ const Login = () => {
                   </FormLabel>
                   <Input
                     type="Input"
-                    mb="12"
+                    mb="8"
                     w={400}
                     {...register("password")}
                     flex={{ lg: "1", base: "none" }}
@@ -100,7 +101,6 @@ const Login = () => {
               borderRadius="lg"
               size="lg"
               width="25%"
-              onClick={OnOpen}
               type="submit"
               backgroundColor="#FAFAFA"
               fontWeight="700"
@@ -123,7 +123,6 @@ const Login = () => {
             </Button>
           </form>
         </Box>
-        <Auth isOpen={IsOpen} onClose={OnClose} />
       </Flex>
     </>
   );

@@ -67,14 +67,14 @@ const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               backgroundColor="#FAFAFA"
               fontWeight="700"
               boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
-              border="3px solid #F07381;"
+              border="3px solid #FC8019;"
               transition="all 500ms ease"
               _active={{
-                bg: "#F06575",
+                bg: "#FC8019",
                 color: "white",
               }}
               _hover={{
-                bg: "#F06575",
+                bg: "#FC8019",
                 color: "white",
               }}
               _focus={{
