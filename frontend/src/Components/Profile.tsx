@@ -22,8 +22,6 @@ const Profile: React.FC<profileProps> = () => {
   const { isOpen: IsOpen, onOpen: OnOpen, onClose: OnClose } = useDisclosure();
 
   const onSubmit = async (data: any) => {
-    console.log("here");
-    console.log(data);
     try {
     } catch (err) {
       console.log(err);
