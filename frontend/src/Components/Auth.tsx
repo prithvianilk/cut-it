@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useStoreState } from "easy-peasy";
 import React from "react";
+import { useForm } from "react-hook-form";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -21,14 +22,20 @@ interface AuthModalProps {
 }
 
 const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+  const { register, handleSubmit, control,formState:{errors} } = useForm();
   const closeModal = () => {
     onClose();
   };
+
+  const onSubmit = async (data: any) => {
+
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
       <ModalOverlay />
       <ModalContent borderRadius="20">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>
             <Text fontSize="md" fontWeight="bold">Verify Phone Number</Text>
           </ModalHeader>
@@ -67,14 +74,14 @@ const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               backgroundColor="#FAFAFA"
               fontWeight="700"
               boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
-              border="3px solid #F07381;"
+              border="3px solid #FC8019;"
               transition="all 500ms ease"
               _active={{
-                bg: "#F06575",
+                bg: "#FC8019",
                 color: "white",
               }}
               _hover={{
-                bg: "#F06575",
+                bg: "#FC8019",
                 color: "white",
               }}
               _focus={{

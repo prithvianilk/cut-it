@@ -1,41 +1,39 @@
 import {
     Box,
-    Button,
-    Divider,
     Flex,
+    Text,
     FormControl,
     FormLabel,
     Input,
+    Divider,
     Stack,
-    Text,
+    Button,
     useDisclosure,
+    Heading,
 } from "@chakra-ui/react";
-import React from "react";
-import { useForm } from "react-hook-form";
+import axios from "axios";
+import { Controller, useForm } from "react-hook-form";
 import { useStore } from "../Store/store";
-import Auth from "./Auth";
+import history from "../history";
 
 interface LoginData {
-    ph_num: string;
+    phone: string;
     password: string;
 }
 
-const Login: React.FC<LoginData> = () => {
+const Login = () => {
+    //   const { phno } = useStoreState((state: any) => state.phno);
     const {
         register,
         handleSubmit,
         control,
         formState: { errors },
     } = useForm();
+    //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
     const setPhno = useStore((state) => state.setPhoneNumber);
-    const {
-        isOpen: IsOpen,
-        onOpen: OnOpen,
-        onClose: OnClose,
-    } = useDisclosure();
-
     const onSubmit = async (data: any) => {
         setPhno(data.ph_num);
+        await axios.post("http://localhost:3530/auth/login", data);
     };
 
     return (
@@ -53,13 +51,14 @@ const Login: React.FC<LoginData> = () => {
                     my="200"
                     px="35px"
                 >
-                    <Text textAlign="center" fontSize="3xl" fontWeight="medium">
+                    <Heading mb="2" textAlign="center">
                         Ladoo
-                    </Text>
+                    </Heading>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
-                            <FormControl id="ph_num" display="flex" isRequired>
+                            0
+                            <FormControl id="phone" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
                                         fontSize="18px"
@@ -71,10 +70,10 @@ const Login: React.FC<LoginData> = () => {
                                     <Input
                                         type="Input"
                                         mb="12"
-                                        {...register("ph_num")}
+                                        {...register("phone")}
                                         w={350}
                                         flex={{ lg: "1", base: "none" }}
-                                        name="ph_num"
+                                        name="phone"
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}
@@ -96,7 +95,7 @@ const Login: React.FC<LoginData> = () => {
                                     </FormLabel>
                                     <Input
                                         type="Input"
-                                        mb="12"
+                                        mb="8"
                                         w={400}
                                         {...register("password")}
                                         flex={{ lg: "1", base: "none" }}
@@ -108,35 +107,61 @@ const Login: React.FC<LoginData> = () => {
                                 </Flex>
                             </FormControl>
                         </Stack>
-                        <Button
-                            justifySelf="center"
-                            borderRadius="lg"
-                            size="lg"
-                            width="25%"
-                            onClick={OnOpen}
-                            type="submit"
-                            backgroundColor="#FAFAFA"
-                            fontWeight="700"
-                            boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
-                            border="3px solid #F07381;"
-                            transition="all 500ms ease"
-                            _active={{
-                                bg: "#F06575",
-                                color: "white",
-                            }}
-                            _hover={{
-                                bg: "#F06575",
-                                color: "white",
-                            }}
-                            _focus={{
-                                boxShadow: "transparent",
-                            }}
-                        >
-                            Login
-                        </Button>
+                            <Button
+                                justifySelf="center"
+                                borderRadius="lg"
+                                size="lg"
+                                width="25%"
+                                type="submit"
+                                backgroundColor="#FAFAFA"
+                                fontWeight="700"
+                                boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
+                                border="3px solid #F07381;"
+                                transition="all 500ms ease"
+                                _active={{
+                                    bg: "#F06575",
+                                    color: "white",
+                                }}
+                                _hover={{
+                                    bg: "#F06575",
+                                    color: "white",
+                                }}
+                                _focus={{
+                                    boxShadow: "transparent",
+                                }}
+                            >
+                                Login
+                            </Button>
+                            <Button
+                                justifySelf="center"
+                                borderRadius="lg"
+                                size="lg"
+                                width="25%"
+                                mx='5%'
+                                backgroundColor="#FAFAFA"
+                                fontWeight="700"
+                                boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
+                                border="3px solid #F07381;"
+                                transition="all 500ms ease"
+                                _active={{
+                                    bg: "#F06575",
+                                    color: "white",
+                                }}
+                                _hover={{
+                                    bg: "#F06575",
+                                    color: "white",
+                                }}
+                                _focus={{
+                                    boxShadow: "transparent",
+                                }}
+                                onClick={() => {
+                                    history.push("/signup");
+                                }}
+                            >
+                                Sign Up
+                            </Button>
                     </form>
                 </Box>
-                <Auth isOpen={IsOpen} onClose={OnClose} />
             </Flex>
         </>
     );

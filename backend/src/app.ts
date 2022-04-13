@@ -1,12 +1,12 @@
-import Express from "express";
 import bodyParser from "body-parser";
-import { MONGO_DB_URI, PORT } from "./constants";
-import cors from 'cors';
-import otpRouter from "./otp/router";
-import orderRouter from "./order/router";
-import authRouter from "./auth/router";
-
+import cors from "cors";
+import Express from "express";
 import mongoose from "mongoose";
+import authRouter from "./auth/router";
+import { MONGO_DB_URI, PORT } from "./constants";
+import orderRouter from "./order/router";
+import otpRouter from "./otp/router";
+
 
 // Connect to MongoDB
 mongoose
