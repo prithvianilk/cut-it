@@ -1,14 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import {Route,Router,Switch} from 'react-router-dom';
 import './App.css';
-import {ChakraProvider, ThemeProvider} from '@chakra-ui/react'
+import {ChakraProvider} from '@chakra-ui/react'
 import history from './history';
 import Login from './Components/Login';
-
+import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
+import theme from './themes';
+import store from './Store/store';
 function App() {
   return (
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <Router history={history}>
           <Switch>
             <Route path="/" exact component={Login}/>
