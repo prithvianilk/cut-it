@@ -13,9 +13,9 @@ export const signup = async (request: any, response: Response) => {
     if (user) return response.status(400).json({ msg: "User already exists" });
 
     const newUser = new User({
-      username: username,
-      phone: phone,
-      password: password,
+      username,
+      phone,
+      password,
     });
 
     newUser

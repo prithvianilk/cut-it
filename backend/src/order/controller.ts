@@ -175,7 +175,7 @@ export const getAndSaveOrders = async (
   }
   const foodItemIds = await FoodItem.insertMany(allItems);
   await User.updateOne(
-    { phone: phone },
+    { phone },
     {
       $push: {
         items: foodItemIds,
@@ -189,9 +189,7 @@ export const getAndSaveOrders = async (
 
 export const getData = async (request: Request, response: Response) => {
   const { phone } = request.params;
-  const user = await User.findOne({ phone: phone })
-    .populate({ path: "items" })
-    .exec();
+  const user = await User.findOne({ phone }).populate({ path: "items" }).exec();
   const frequencyPerFoodName = getFrequencyPerFoodName(user.items);
   const monthlyData = getMonthlyData(user.items);
   const restaurantFrequency = getRestaurantFrequency(user.items);

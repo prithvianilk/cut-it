@@ -16,6 +16,7 @@ const userSchema = new Schema({
   budget: {
     type: Number,
     required: false,
+    default: 0,
   },
   items: [{ type: Schema.Types.ObjectId, ref: "foodItem", default: [] }],
 });

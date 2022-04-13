@@ -25,15 +25,16 @@ export const sendOTP = async (request: Request, response: Response) => {
   const { phone } = request.body;
   console.log(phone);
   await startSession(phone);
-  await requestOTP(phone).catch((error: any) => {console.log(error)});
-  response.send();
+  await requestOTP(phone);
   console.log("OTP sent");
+  response.send();
 };
 
 export const verifyOTP = async (request: Request, response: Response) => {
   const { otp, phone } = request.body;
   const _csrf = users.getCsrf(phone);
   const Cookie = users.generate(phone);
+  console.log(_csrf, Cookie, phone, otp);
   const { data, headers } = await axios.post(
     SWIGGY_OTP_VERIFY_URL,
     {
@@ -55,7 +56,7 @@ const requestOTP = async (phone: number) => {
   const { data } = await axios.post(
     SWIGGY_SMS_OTP_URL,
     {
-      phone,
+      mobile: phone,
       _csrf: users.getCsrf(phone),
     },
     {

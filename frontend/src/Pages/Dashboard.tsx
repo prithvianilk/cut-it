@@ -9,7 +9,7 @@ import axios from "../Utils/axios";
 interface DashBoardProps {}
 
 const DashBoard: React.FC<DashBoardProps> = () => {
-  const mobile = Number(useStore((state) => state.phoneNumber));
+  const phone = Number(useStore((state) => state.phoneNumber));
   const [isDone, setDone] = useState<boolean>(false);
   const [frequentOrders, setFrequentOrders] = useState<IGraphData[]>([]);
   const [monthlyData, setMonthlyData] = useState<IGraphData[]>([]);
@@ -20,7 +20,7 @@ const DashBoard: React.FC<DashBoardProps> = () => {
 
   useEffect(() => {
     const getUserData = async () => {
-      const { data } = await axios.get(`/order/${mobile}`);
+      const { data } = await axios.get(`/order/${phone}`);
       const {
         user,
         frequencyPerFoodName,
