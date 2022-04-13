@@ -1,6 +1,15 @@
 import {
-  Box, Button, Divider, Flex, FormControl,
-  FormLabel, Heading, Input, Stack
+    Box,
+    Button,
+    Divider,
+    Flex,
+    FormControl,
+    FormLabel,
+    Heading,
+    Input,
+    Spacer,
+    Stack,
+    Text,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -14,21 +23,65 @@ interface LoginData {
 
 const Login = () => {
     //   const { phno } = useStoreState((state: any) => state.phno);
-    const phno=useStore((state:any)=>{return state.phoneNumber});
-    const setPhno=useStore((state:any)=>state.setPhoneNumber);
-    let navigate=useNavigate();
-    const {
-        register,
-        handleSubmit,
-    } = useForm();
+    const phno = useStore((state: any) => {
+        return state.phoneNumber;
+    });
+    const setPhno = useStore((state: any) => state.setPhoneNumber);
+    const setPwd = useStore((state: any) => state.setPassword);
+    let navigate = useNavigate();
+    const { register, handleSubmit } = useForm();
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
     const onSubmit = async (data: any) => {
+        console.log(data.phone);
         setPhno(data.phone);
-        await axios.post("http://localhost:3530/auth/login", data).then((res) => {navigate(('/profile'))});
+        setPwd(data.password);
+        await axios
+            .post("http://localhost:3530/auth/login", data)
+            .then((res) => {
+                const {data} = res;
+                if(data.isDataStored)
+                    navigate("/dash");
+                else
+                    navigate("/profile");
+
+            });
     };
 
     return (
         <>
+            <Flex w="100%" position="absolute">
+                <Spacer />
+                <Heading
+                    justifySelf="center"
+                    size="md"
+                    width="5%"
+                    m="2%"
+                    onClick={() => {
+                        navigate("/");
+                    }}
+                    _hover={{
+                        bg: "white",
+                        color: "#F06575"
+                    }}
+                >
+                    Login
+                </Heading>
+                <Heading
+                    justifySelf="center"
+                    size="md"
+                    onClick={() => {
+                        navigate("/signup");
+                    }}
+                    width="5%"
+                    m="2%"
+                    _hover={{
+                        bg: "white",
+                        color: "#F06575"
+                    }}
+                >
+                    Sign Up
+                </Heading>
+            </Flex>
             <Flex justify="center" flexDir="column">
                 <Box
                     bgColor="#FAFAFA"
@@ -89,7 +142,7 @@ const Login = () => {
                                         {...register("password")}
                                         flex={{ lg: "1", base: "none" }}
                                         name="password"
-                                        type='password'
+                                        type="password"
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}
@@ -97,59 +150,31 @@ const Login = () => {
                                 </Flex>
                             </FormControl>
                         </Stack>
-                            <Button
-                                justifySelf="center"
-                                borderRadius="lg"
-                                size="lg"
-                                width="25%"
-                                type="submit"
-                                backgroundColor="#FAFAFA"
-                                fontWeight="700"
-                                boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
-                                border="3px solid #F07381;"
-                                transition="all 500ms ease"
-                                _active={{
-                                    bg: "#F06575",
-                                    color: "white",
-                                }}
-                                _hover={{
-                                    bg: "#F06575",
-                                    color: "white",
-                                }}
-                                _focus={{
-                                    boxShadow: "transparent",
-                                }}
-                            >
-                                Login
-                            </Button>
-                            <Button
-                                justifySelf="center"
-                                borderRadius="lg"
-                                size="lg"
-                                width="25%"
-                                mx='5%'
-                                backgroundColor="#FAFAFA"
-                                fontWeight="700"
-                                boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
-                                border="3px solid #F07381;"
-                                transition="all 500ms ease"
-                                _active={{
-                                    bg: "#F06575",
-                                    color: "white",
-                                }}
-                                _hover={{
-                                    bg: "#F06575",
-                                    color: "white",
-                                }}
-                                _focus={{
-                                    boxShadow: "transparent",
-                                }}
-                                onClick={() => {
-                                    navigate('/signup');
-                                }}
-                            >
-                                Sign Up
-                            </Button>
+                        <Button
+                            justifySelf="center"
+                            borderRadius="lg"
+                            size="lg"
+                            width="25%"
+                            type="submit"
+                            backgroundColor="#FAFAFA"
+                            fontWeight="700"
+                            boxShadow="4px 4px 24px rgba(0, 0, 0, 0.08);"
+                            border="3px solid #F07381;"
+                            transition="all 500ms ease"
+                            _active={{
+                                bg: "#F06575",
+                                color: "white",
+                            }}
+                            _hover={{
+                                bg: "#F06575",
+                                color: "white",
+                            }}
+                            _focus={{
+                                boxShadow: "transparent",
+                            }}
+                        >
+                            Login
+                        </Button>
                     </form>
                 </Box>
             </Flex>

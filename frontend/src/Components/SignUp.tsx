@@ -7,6 +7,7 @@ import {
     FormLabel,
     Heading,
     Input,
+    Spacer,
     Stack,
 } from "@chakra-ui/react";
 import React from "react";
@@ -38,6 +39,39 @@ export const Signup: React.FC<any> = () => {
 
     return (
         <>
+            <Flex w="100%" position="absolute">
+                <Spacer />
+                <Heading
+                    justifySelf="center"
+                    size="md"
+                    width="5%"
+                    m="2%"
+                    onClick={() => {
+                        navigate("/");
+                    }}
+                    _hover={{
+                        bg: "white",
+                        color: "#F06575"
+                    }}
+                >
+                    Login
+                </Heading>
+                <Heading
+                    justifySelf="center"
+                    size="md"
+                    onClick={() => {
+                        navigate("/signup");
+                    }}
+                    width="5%"
+                    m="2%"
+                    _hover={{
+                        bg: "white",
+                        color: "#F06575"
+                    }}
+                >
+                    Sign Up
+                </Heading>
+            </Flex>
             <Flex justify="center" flexDir="column">
                 <Box
                     bgColor="#FAFAFA"
