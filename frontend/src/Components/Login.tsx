@@ -1,20 +1,11 @@
 import {
-    Box,
-    Flex,
-    Text,
-    FormControl,
-    FormLabel,
-    Input,
-    Divider,
-    Stack,
-    Button,
-    useDisclosure,
-    Heading,
+  Box, Button, Divider, Flex, FormControl,
+  FormLabel, Heading, Input, Stack
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
-import history from "../history";
 
 interface LoginData {
     phone: string;
@@ -26,8 +17,6 @@ const Login = () => {
     const {
         register,
         handleSubmit,
-        control,
-        formState: { errors },
     } = useForm();
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
     const setPhno = useStore((state) => state.setPhoneNumber);
@@ -35,6 +24,7 @@ const Login = () => {
         setPhno(data.ph_num);
         await axios.post("http://localhost:3530/auth/login", data);
     };
+    let navigate = useNavigate();
 
     return (
         <>
@@ -155,7 +145,7 @@ const Login = () => {
                                     boxShadow: "transparent",
                                 }}
                                 onClick={() => {
-                                    history.push("/signup");
+                                    navigate('/signup');
                                 }}
                             >
                                 Sign Up

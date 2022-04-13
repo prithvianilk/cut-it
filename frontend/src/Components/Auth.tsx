@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
   Divider,
   FormControl,
   FormLabel,
@@ -10,9 +10,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
+  Text
 } from "@chakra-ui/react";
-import { useStoreState } from "easy-peasy";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -22,7 +21,7 @@ interface AuthModalProps {
 }
 
 const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const { register, handleSubmit, control,formState:{errors} } = useForm();
+  const { handleSubmit } = useForm();
   const closeModal = () => {
     onClose();
   };

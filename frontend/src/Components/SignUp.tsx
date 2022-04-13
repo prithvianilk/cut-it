@@ -1,19 +1,17 @@
 import {
-    Box,
-    Button,
-    Divider,
-    Flex,
-    FormControl,
-    FormLabel,
-    Input,
-    Stack,
-    Text,
-    useDisclosure,
+	Box,
+	Button,
+	Divider,
+	Flex,
+	FormControl,
+	FormLabel,
+	Input,
+	Stack,
+	Text
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useStore } from "../Store/store";
-import Auth from "./Auth";
 
 interface SignUpData {
 	username: string;
@@ -21,7 +19,7 @@ interface SignUpData {
     password: string;
 }
 
-export const Signup: React.FC<SignUpData> = () => {
+export const Signup: React.FC<any> = () => {
     const {
         register,
         handleSubmit,
@@ -42,7 +40,7 @@ export const Signup: React.FC<SignUpData> = () => {
                     border="1px solid rgba(0, 0, 0, 0.05);"
                     boxShadow="-2px -2px 8px rgba(0, 0, 0, 0.02), 6px 6px 12px rgba(0, 0, 0, 0.08);"
                     borderRadius="20px"
-                    h="400px"
+                    h="500px"
                     mx="auto"
                     my="200"
                     px="35px"
