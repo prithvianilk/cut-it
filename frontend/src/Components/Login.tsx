@@ -42,7 +42,7 @@ const Login = () => {
                     px="35px"
                 >
                     <Heading mb="2" textAlign="center">
-                        Ladoo
+                        Laddoo
                     </Heading>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
