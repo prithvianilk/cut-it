@@ -5,31 +5,35 @@ import {
     Flex,
     FormControl,
     FormLabel,
+    Heading,
     Input,
     Stack,
-    Text,
-    useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
-import Auth from "./Auth";
+import axios from "../Utils/axios";
 
 interface SignUpData {
-	username: string;
+    username: string;
     ph_num: string;
     password: string;
 }
 
-export const Signup: React.FC<SignUpData> = () => {
-    const {
-        register,
-        handleSubmit,
-    } = useForm();
+export const Signup: React.FC<any> = () => {
+    const { register, handleSubmit } = useForm();
+    const setUsername = useStore((state) => state.setUsername);
     const setPhno = useStore((state) => state.setPhoneNumber);
-
+    const setPwd = useStore((state) => state.setPassword);
+    const navigate = useNavigate();
     const onSubmit = async (data: any) => {
-        setPhno(data.ph_num);
+        console.log(data);
+        setUsername(data.username);
+        setPhno(data.phone);
+        setPwd(data.password);
+        await axios.post("/auth/signup", data);
+        navigate("/");
     };
 
     return (
@@ -42,18 +46,22 @@ export const Signup: React.FC<SignUpData> = () => {
                     border="1px solid rgba(0, 0, 0, 0.05);"
                     boxShadow="-2px -2px 8px rgba(0, 0, 0, 0.02), 6px 6px 12px rgba(0, 0, 0, 0.08);"
                     borderRadius="20px"
-                    h="400px"
+                    h="500px"
                     mx="auto"
                     my="200"
                     px="35px"
                 >
-                    <Text textAlign="center" fontSize="3xl" fontWeight="medium">
+                    <Heading mb="2" textAlign="center">
                         Sign Up
-                    </Text>
+                    </Heading>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
-                            <FormControl id="username" display="flex" isRequired>
+                            <FormControl
+                                id="username"
+                                display="flex"
+                                isRequired
+                            >
                                 <Flex flexDirection="row">
                                     <FormLabel
                                         fontSize="18px"
@@ -75,7 +83,7 @@ export const Signup: React.FC<SignUpData> = () => {
                                     />
                                 </Flex>
                             </FormControl>
-                            <FormControl id="ph_num" display="flex" isRequired>
+                            <FormControl id="phone" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
                                         fontSize="18px"
@@ -87,10 +95,10 @@ export const Signup: React.FC<SignUpData> = () => {
                                     <Input
                                         type="Input"
                                         mb="12"
-                                        {...register("ph_num")}
+                                        {...register("phone")}
                                         w={350}
                                         flex={{ lg: "1", base: "none" }}
-                                        name="ph_num"
+                                        name="phone"
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}
@@ -111,7 +119,7 @@ export const Signup: React.FC<SignUpData> = () => {
                                         Password
                                     </FormLabel>
                                     <Input
-                                        type="Input"
+                                        type="password"
                                         mb="12"
                                         w={400}
                                         {...register("password")}
@@ -147,7 +155,7 @@ export const Signup: React.FC<SignUpData> = () => {
                                 boxShadow: "transparent",
                             }}
                         >
-                            Login
+                            Sign Up
                         </Button>
                     </form>
                 </Box>

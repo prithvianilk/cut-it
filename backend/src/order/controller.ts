@@ -81,7 +81,7 @@ const getBudgetPieValues = (items: IFoodItem[], monthlyBudget: Number) => {
 };
 
 export const getOrders = async (request: Request, response: Response) => {
-  const { mobile } = request.body;
+  const { phone } = request.body;
   let allOrdersSaved = false;
   let lastOrderId = "";
   const allOrders = [];
@@ -89,7 +89,7 @@ export const getOrders = async (request: Request, response: Response) => {
     const url = `${SWIGGY_ALL_ORDERS}/order_id=${lastOrderId}`;
     const { data } = await axios.get(url, {
       headers: {
-        Cookie: users.generate(mobile),
+        Cookie: users.generate(phone),
       },
     });
     const orders = data.orders.map(
@@ -129,7 +129,7 @@ export const getAndSaveOrders = async (
   request: Request,
   response: Response
 ) => {
-  const { mobile } = request.body;
+  const { phone } = request.body;
   let allOrdersSaved = false;
   let lastOrderId = "";
   const allItems: IFoodItem[] = [];
@@ -137,7 +137,7 @@ export const getAndSaveOrders = async (
     const url = `${SWIGGY_ALL_ORDERS}?order_id=${lastOrderId}`;
     const { data } = await axios.get(url, {
       headers: {
-        Cookie: users.generate(mobile),
+        Cookie: users.generate(phone),
       },
     });
     const {
@@ -175,7 +175,7 @@ export const getAndSaveOrders = async (
   }
   const foodItemIds = await FoodItem.insertMany(allItems);
   await User.updateOne(
-    { phone: mobile },
+    { phone: phone },
     {
       $push: {
         items: foodItemIds,
@@ -188,8 +188,8 @@ export const getAndSaveOrders = async (
 };
 
 export const getData = async (request: Request, response: Response) => {
-  const { mobile } = request.params;
-  const user = await User.findOne({ phone: mobile })
+  const { phone } = request.params;
+  const user = await User.findOne({ phone: phone })
     .populate({ path: "items" })
     .exec();
   const frequencyPerFoodName = getFrequencyPerFoodName(user.items);

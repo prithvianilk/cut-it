@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import FoodBarChart from "../Components/BarChart";
 import PieChart from "../Components/PieChart";
 import { IGraphData } from "../Interfaces/GraphData";
+import { useStore } from "../Store/store";
 import axios from "../Utils/axios";
 
 interface DashBoardProps {}
 
 const DashBoard: React.FC<DashBoardProps> = () => {
-  const mobile = 9113240914;
+  const mobile = Number(useStore((state) => state.phoneNumber));
   const [isDone, setDone] = useState<boolean>(false);
   const [frequentOrders, setFrequentOrders] = useState<IGraphData[]>([]);
   const [monthlyData, setMonthlyData] = useState<IGraphData[]>([]);

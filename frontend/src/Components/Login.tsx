@@ -1,20 +1,11 @@
 import {
-    Box,
-    Flex,
-    Text,
-    FormControl,
-    FormLabel,
-    Input,
-    Divider,
-    Stack,
-    Button,
-    useDisclosure,
-    Heading,
+  Box, Button, Divider, Flex, FormControl,
+  FormLabel, Heading, Input, Stack
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
-import history from "../history";
 
 interface LoginData {
     phone: string;
@@ -23,17 +14,17 @@ interface LoginData {
 
 const Login = () => {
     //   const { phno } = useStoreState((state: any) => state.phno);
+    const phno=useStore((state:any)=>{return state.phoneNumber});
+    const setPhno=useStore((state:any)=>state.setPhoneNumber);
+    let navigate=useNavigate();
     const {
         register,
         handleSubmit,
-        control,
-        formState: { errors },
     } = useForm();
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
-    const setPhno = useStore((state) => state.setPhoneNumber);
     const onSubmit = async (data: any) => {
-        setPhno(data.ph_num);
-        await axios.post("http://localhost:3530/auth/login", data);
+        setPhno(data.phone);
+        await axios.post("http://localhost:3530/auth/login", data).then((res) => {navigate(('/profile'))});
     };
 
     return (
@@ -52,12 +43,11 @@ const Login = () => {
                     px="35px"
                 >
                     <Heading mb="2" textAlign="center">
-                        Ladoo
+                        Laddoo
                     </Heading>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
-                            0
                             <FormControl id="phone" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
@@ -71,7 +61,7 @@ const Login = () => {
                                         type="Input"
                                         mb="12"
                                         {...register("phone")}
-                                        w={350}
+                                        w={358}
                                         flex={{ lg: "1", base: "none" }}
                                         name="phone"
                                         _focus={{
@@ -94,12 +84,12 @@ const Login = () => {
                                         Password
                                     </FormLabel>
                                     <Input
-                                        type="Input"
                                         mb="8"
                                         w={400}
                                         {...register("password")}
                                         flex={{ lg: "1", base: "none" }}
                                         name="password"
+                                        type='password'
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}
@@ -155,7 +145,7 @@ const Login = () => {
                                     boxShadow: "transparent",
                                 }}
                                 onClick={() => {
-                                    history.push("/signup");
+                                    navigate('/signup');
                                 }}
                             >
                                 Sign Up
