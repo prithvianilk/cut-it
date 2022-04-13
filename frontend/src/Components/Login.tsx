@@ -24,8 +24,7 @@ const Login = () => {
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
     const onSubmit = async (data: any) => {
         setPhno(data.phone);
-        navigate('/profile');
-        await axios.post("http://localhost:3530/auth/login", data);
+        await axios.post("http://localhost:3530/auth/login", data).then((res) => {navigate(('/profile'))});
     };
 
     return (
