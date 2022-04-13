@@ -5,10 +5,10 @@ import {
   SWIGGY_OTP_VERIFY_URL,
   SWIGGY_SMS_OTP_URL,
 } from "../constants";
-import { values } from "../utils/values";
+import { users } from "../utils/values";
 //TODO must be persisted
 
-const startSession = async () => {
+const startSession = async (mobile: number) => {
   try {
     await axios.get(SWIGGY_DAPI_URL);
     //TODO clean this code
@@ -17,64 +17,75 @@ const startSession = async () => {
     const { headers, data } = error.response;
     const { csrfToken } = data;
     const setCookieList = headers["set-cookie"];
-    const cookie = setCookieList[0];
-    const swiggyCookieValue = cookie.substring(0, cookie.indexOf(";") + 1);
-    return { csrfToken, swiggyCookieValue };
+    users.create(mobile, csrfToken);
+    users.add(mobile, setCookieList);
+    console.log(setCookieList);
+    console.log(users.generate(mobile));
+    for (let i = 0; i < 10; ++i) {
+      console.log("-");
+    }
   }
 };
 
 export const sendOTP = async (request: Request, response: Response) => {
   const { mobile } = request.body;
-  const { csrfToken, swiggyCookieValue } = await startSession();
-  values.csrfToken = csrfToken;
-  values.swiggyCookieValue = swiggyCookieValue;
-  await requestOTP(mobile, csrfToken);
+  await startSession(mobile);
+  await requestOTP(mobile);
   response.send();
 };
 
 export const verifyOTP = async (request: Request, response: Response) => {
-  const { otp } = request.body;
+  const { otp, mobile } = request.body;
+  const _csrf = users.getCsrf(mobile);
+  const Cookie = users.generate(mobile);
+  console.log(_csrf, Cookie);
+  for (let i = 0; i < 10; ++i) {
+    console.log("*");
+  }
   const { data, headers } = await axios.post(
     SWIGGY_OTP_VERIFY_URL,
     {
       otp,
-      _csrf: values.csrfToken,
+      _csrf,
     },
     {
       headers: {
-        Cookie: values.swiggyCookieValue,
+        Cookie,
       },
     }
   );
   const setCookieList = headers["set-cookie"];
-  if (setCookieList !== undefined) {
-    const cookie = setCookieList[2];
-    const sessionTidCookie = cookie.substring(0, cookie.indexOf(";") + 1);
-    values.swiggyCookieValue += `; ${sessionTidCookie}`;
+  console.log(setCookieList);
+  users.add(mobile, setCookieList);
+  console.log(users.generate(mobile));
+  for (let i = 0; i < 10; ++i) {
+    console.log("-");
   }
-  if (setCookieList !== undefined) {
-    const cookie = setCookieList[1];
-    const isLoggedInCookie = cookie.substring(0, cookie.indexOf(";") + 1);
-    values.swiggyCookieValue += `; ${isLoggedInCookie}`;
-  }
-  console.log(values);
   response.send({ data, headers });
 };
 
-const requestOTP = async (mobile: number, csrfToken: string) => {
+const requestOTP = async (mobile: number) => {
   const { data } = await axios.post(
     SWIGGY_SMS_OTP_URL,
     {
       mobile,
-      _csrf: csrfToken,
+      _csrf: users.getCsrf(mobile),
     },
     {
       headers: {
-        Cookie: values.swiggyCookieValue,
+        Cookie: users.generate(mobile),
       },
     }
   );
   const { sid, tid, deviceId } = data;
-  values.swiggyCookieValue += ` _tid=${tid}; _sid=${sid}; _guest_tid=${tid}; _device_id=${deviceId}`;
-  console.log(values.swiggyCookieValue);
+  users.add(mobile, [
+    `_tid=${tid};`,
+    `_sid=${sid};`,
+    `_guest_tid=${tid};`,
+    `_device_id=${deviceId};`,
+  ]);
+  console.log(users.generate(mobile));
+  for (let i = 0; i < 10; ++i) {
+    console.log("-");
+  }
 };

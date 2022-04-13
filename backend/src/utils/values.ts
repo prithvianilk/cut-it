@@ -1,1 +1,3 @@
-export let values = { csrfToken: "", swiggyCookieValue: "" };
+import { UserCookies } from "./CookieStore";
+
+export let users = new UserCookies();
