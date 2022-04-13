@@ -18,6 +18,16 @@ const userSchema = new Schema({
     required: false,
     default: 0,
   },
+  calorieBudget: {
+    type: Number,
+    required: false,
+    default: 2000,
+  },
+  isDataStored: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   items: [{ type: Schema.Types.ObjectId, ref: "foodItem", default: [] }],
 });
 

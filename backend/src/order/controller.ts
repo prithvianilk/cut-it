@@ -180,6 +180,9 @@ export const getAndSaveOrders = async (
       $push: {
         items: foodItemIds,
       },
+      $set: {
+        isDataStored: true,
+      },
     }
   );
   response.send({
