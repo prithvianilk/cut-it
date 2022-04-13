@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
   Divider,
   FormControl,
   FormLabel,
@@ -10,12 +10,12 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
+  Text
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useStoreState } from "easy-peasy";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useStore } from "../Store/store";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -23,13 +23,14 @@ interface AuthModalProps {
 }
 
 const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const { register, handleSubmit, control,formState:{errors} } = useForm();
+  const { register,handleSubmit } = useForm();
   const closeModal = () => {
     onClose();
   };
-  //write the phone number to the store
+  const phno=useStore((state:any)=>{return state.phoneNumber});
+  const setPhno=useStore((state:any)=>state.setPhoneNumber);
   const onSubmit = async (data: any) => {
-      await axios.post('http://localhost:3530/otp/verify', data);
+      await axios.post('http://localhost:3530/otp/verify', {'otp':Number(data.otp),'mobile':Number(phno)});
   }
 
   return (
@@ -57,7 +58,7 @@ const Auth: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               <Divider my="3" />
               <Input
                 type="Input"
-                {...register("mobile")}
+                {...register("otp")}
                 w={400}
                 flex={{ lg: "1", base: "none" }}
                 name="otp"

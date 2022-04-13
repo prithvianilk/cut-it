@@ -32,7 +32,7 @@ const Profile: React.FC<profileProps> = () => {
 
   const sendReq=async ()=>{
       console.log(phno);
-      await axios.post("http://localhost:3530/otp/send",{'mobile':7406776698});
+      await axios.post("http://localhost:3530/otp/send",{'mobile':Number(phno)});
   }
 
   return (

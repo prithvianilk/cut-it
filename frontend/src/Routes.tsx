@@ -1,19 +1,18 @@
-import { Route, Router, Switch } from "react-router-dom";
+import { Route, BrowserRouter, Routes} from "react-router-dom";
 import Login from "./Components/Login";
 import Profile from "./Components/Profile";
 import { Signup } from "./Components/SignUp";
-import history from "./history";
 import DashBoard from "./Pages/Dashboard";
 
-export const Routes = () => {
+export const Routes1 = () => {
     return (
-        <Router history={history}>
-            <Switch>
-                <Route path="/" exact component={Login} />
-                <Route path="/profile" exact component={Profile} />
-                <Route path="/signup" exact component={Signup} />
-                <Route path="/dash" exact component={DashBoard} />
-            </Switch>
-        </Router>
+		<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<Login/>}/>
+			<Route path="/profile" element={<Profile/>} />
+			<Route path="/signup" element={<Signup/>} />
+            <Route path='/dash' element={<DashBoard/>} />
+		</Routes>
+		</BrowserRouter>
     );
 };

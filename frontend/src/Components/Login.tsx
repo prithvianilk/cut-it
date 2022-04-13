@@ -1,20 +1,11 @@
 import {
-    Box,
-    Flex,
-    Text,
-    FormControl,
-    FormLabel,
-    Input,
-    Divider,
-    Stack,
-    Button,
-    useDisclosure,
-    Heading,
+  Box, Button, Divider, Flex, FormControl,
+  FormLabel, Heading, Input, Stack
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
-import history from "../history";
 
 interface LoginData {
     phone: string;
@@ -23,16 +14,18 @@ interface LoginData {
 
 const Login = () => {
     //   const { phno } = useStoreState((state: any) => state.phno);
+    const phno=useStore((state:any)=>{return state.phoneNumber});
+    const setPhno=useStore((state:any)=>state.setPhoneNumber);
+    let navigate=useNavigate();
     const {
         register,
         handleSubmit,
-        control,
-        formState: { errors },
     } = useForm();
     //   const {setPhno}=useStoreActions((actions:any)=>actions.phno);
     const onSubmit = async (data: any) => {
-        setPhno(data.ph_num);
-        //await axios.post("http://localhost:3530/auth/login", data.ph_num);
+        setPhno(data.phone);
+        navigate('/profile');
+        await axios.post("http://localhost:3530/auth/login", data);
     };
 
     return (
@@ -69,7 +62,7 @@ const Login = () => {
                                         type="Input"
                                         mb="12"
                                         {...register("phone")}
-                                        w={350}
+                                        w={358}
                                         flex={{ lg: "1", base: "none" }}
                                         name="phone"
                                         _focus={{
@@ -153,7 +146,7 @@ const Login = () => {
                                     boxShadow: "transparent",
                                 }}
                                 onClick={() => {
-                                    history.push("/signup");
+                                    navigate('/signup');
                                 }}
                             >
                                 Sign Up
