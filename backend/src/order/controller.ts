@@ -68,7 +68,7 @@ export const getAndSaveOrders = async (
 };
 
 export const getData = async (request: Request, response: Response) => {
-  const { mobile } = request.body;
+  const { mobile } = request.params;
   const user = await User.findOne({ phone: mobile })
     .populate({ path: "items" })
     .exec();

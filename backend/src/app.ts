@@ -1,6 +1,7 @@
 import Express from "express";
 import bodyParser from "body-parser";
 import { MONGO_DB_URI, PORT } from "./constants";
+import cors from 'cors';
 import otpRouter from "./otp/router";
 import orderRouter from "./order/router";
 import authRouter from "./auth/router";
@@ -19,6 +20,7 @@ mongoose
   .catch((err) => console.log(err));
 
 const app = Express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/otp", otpRouter);
