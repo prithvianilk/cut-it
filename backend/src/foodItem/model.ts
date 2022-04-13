@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 
 export interface IFoodItem {
+  order_id: string;
   order_time: string;
   restaurant_name: string;
   restaurant_address: string;
@@ -11,6 +12,7 @@ export interface IFoodItem {
 }
 
 const foodItemSchema = new Schema({
+  order_id: String,
   order_time: String,
   restaurant_name: String,
   restaurant_address: String,
