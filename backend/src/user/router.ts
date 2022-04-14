@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { updateUser } from "./controller";
+import { getAllUsersData, updateUser } from "./controller";
 const router = Router();
 
+router.get("/", getAllUsersData);
 router.put("/:phone", updateUser);
 
 export default router;
