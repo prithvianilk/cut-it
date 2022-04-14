@@ -18,10 +18,10 @@ interface profileProps {}
 
 const Profile: React.FC<profileProps> = () => {
   const { handleSubmit, register } = useForm();
-  const phno = useStore((state: any) => {
-    return state.phoneNumber;
-  });
+  const phno=useStore((state:any)=>{return state.phoneNumber});
+  const pwd=useStore((state:any)=>{return state.password});
   const { isOpen: IsOpen, onOpen: OnOpen, onClose: OnClose } = useDisclosure();
+
 
   const onSubmit = async (data: any) => {
     try {
@@ -46,7 +46,6 @@ const Profile: React.FC<profileProps> = () => {
         border="1px solid rgba(0, 0, 0, 0.05);"
         boxShadow="-2px -2px 8px rgba(0, 0, 0, 0.02), 6px 6px 12px rgba(0, 0, 0, 0.08);"
         borderRadius="20px"
-        h="500"
         mx="auto"
         my="200"
         px="35px"
@@ -54,20 +53,6 @@ const Profile: React.FC<profileProps> = () => {
         <Heading>Profile</Heading>
         <Divider marginBottom="5" />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl>
-            <FormLabel fontSize="lg" mb="5px">
-              Phone Number
-            </FormLabel>
-            <Input
-              mb="2"
-              flex={{ lg: "1", base: "none" }}
-              _focus={{
-                border: "#F06575 solid 2px",
-              }}
-              type="number"
-              {...register("phoneNo")}
-            />
-          </FormControl>
           <FormControl>
             <FormLabel fontSize="lg" mb="5px">
               Password
@@ -79,12 +64,13 @@ const Profile: React.FC<profileProps> = () => {
               }}
               mb="2"
               type="password"
+              value={pwd}
               {...register("password")}
             />
           </FormControl>
           <FormControl>
             <FormLabel fontSize="lg" mb="5px">
-              Weight
+              Calories
             </FormLabel>
             <Input
               flex={{ lg: "1", base: "none" }}
@@ -92,21 +78,7 @@ const Profile: React.FC<profileProps> = () => {
                 border: "#F06575 solid 2px",
               }}
               type="number"
-              {...register("weight")}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel fontSize="lg" mb="5px">
-              Height
-            </FormLabel>
-            <Input
-              flex={{ lg: "1", base: "none" }}
-              _focus={{
-                border: "#F06575 solid 2px",
-              }}
-              mb="4"
-              type="number"
-              {...register("height")}
+              {...register("calorie")}
             />
           </FormControl>
           <Flex flexDir="row" justifyContent="space-around">
