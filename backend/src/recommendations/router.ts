@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getData } from "./controller";
+import { getNutritionData, getRecommendations } from "./controller";
 
 const router = Router();
 
-router.get("/:mobile", getData);
+router.get("/nutrition", getNutritionData);
+router.get("/:phone", getRecommendations);
 
 export default router;
