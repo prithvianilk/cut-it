@@ -43,20 +43,20 @@ const getNutritions = async (item: IFoodItem) => {
 		}),
 	]);
 	let calorie = tasks.reduce(
-		(p, c) => p + c.data.totalNutrientsKCal.ENERC_KCAL.quantity,
-		[],
+		(p, c) => p + Number(c.data.totalNutrientsKCal.ENERC_KCAL.quantity),
+		0,
 	);
 	let carbCalorie = tasks.reduce(
-		(p, c) => p + c.data.totalNutrientsKCal.CHOCDF_KCAL.quantity,
-		[],
+		(p, c) => p + Number(c.data.totalNutrientsKCal.CHOCDF_KCAL.quantity),
+		0,
 	);
 	let protCalorie = tasks.reduce(
-		(p, c) => p + c.data.totalNutrientsKCal.PROCNT_KCAL.quantity,
-		[],
+		(p, c) => p + Number(c.data.totalNutrientsKCal.PROCNT_KCAL.quantity),
+		0,
 	);
 	let fatCalorie = tasks.reduce(
-		(p, c) => p + c.data.totalNutrientsKCal.FAT_KCAL.quantity,
-		[],
+		(p, c) => p + Number(c.data.totalNutrientsKCal.FAT_KCAL.quantity),
+		0,
 	);
 
 	const dietLabels = tasks.reduce((p, c) => p.concat(c.data.dietLabels), []);
