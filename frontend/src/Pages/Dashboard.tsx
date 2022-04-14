@@ -232,7 +232,7 @@ const DashBoard: React.FC<DashBoardProps> = () => {
                     </Box>
                 </Box>
             </Flex>
-            <NutritionModal url={} isOpen={isOpen} onClose={onClose}/>
+            {/* <NutritionModal isOpen={isOpen} onClose={onClose}/> */}
         </>
     );
 };

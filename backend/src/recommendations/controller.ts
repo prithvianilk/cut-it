@@ -90,6 +90,7 @@ export const getRecommendations = async (
   }: { items: IFoodItem[]; calorieBudget: number } = user;
   const latest2Items = items.slice(0, 2);
   const averageCaloriesPerMeal = calorieBudget / 4;
+  console.log(latest2Items);
   const tasks = await Promise.all([
     ...latest2Items.map(({ category, sub_category }) => {
       let ingr = category.split(" ").join("+");
