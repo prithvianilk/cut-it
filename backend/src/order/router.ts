@@ -3,7 +3,7 @@ import { getAndSaveOrders, getData } from "./controller";
 
 const router = Router();
 
-router.get("/", getData);
-router.get("/new", getAndSaveOrders);
+router.get("/:phone", getData);
+router.post("/", getAndSaveOrders);
 
 export default router;
