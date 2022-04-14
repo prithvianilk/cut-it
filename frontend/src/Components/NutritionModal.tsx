@@ -12,6 +12,12 @@ import {
     Input,
     Button,
     Flex,
+    Tbody,
+    Table,
+    Td,
+    Th,
+    Thead,
+    Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "../Utils/axios";
@@ -64,7 +70,7 @@ export const NutritionModal: React.FC<NutrientsProps> = ({
         return (
             <Modal isOpen={isOpen} onClose={closeModal} isCentered>
                 <ModalOverlay />
-                <ModalContent borderRadius="20">
+                <ModalContent borderRadius="20" px="5" py="5">
                     <ModalHeader>
                         <Text fontSize="md" fontWeight="bold">
                             Nutritional Facts
@@ -79,52 +85,54 @@ export const NutritionModal: React.FC<NutrientsProps> = ({
                         _active={{ border: "none" }}
                         _focus={{ border: "none" }}
                     />
+                    <Divider mb="4"/>
                     <ModalBody mt="-4">
-                        <Flex>
-                            <Text fontSize="md" fontWeight="bold">
-                                Name:
+                        <Flex justifyContent="flex-start">
+                            <Text fontSize="md" mr="2" fontWeight="semibold">
+                                Name:   
                             </Text>
-                            <Text fontSize="md" fontWeight="bold">
+                            <br/>
+                            <Text fontSize="md" fontWeight="medium">
                                 {nutriData.name}
                             </Text>
                         </Flex>
                         <Flex>
-                            <Text fontSize="md" fontWeight="bold">
-                                Calories:
+                            <Text fontSize="md" mr="2" fontWeight="bold">
+                                Calories:  
                             </Text>
-                            <Text marginLeft={1} fontSize="md" fontWeight="bold">
-                                {nutriData.calories.calorie}
-                            </Text>
-                        </Flex>
-                        <Flex>
-                            <Text fontSize="md" fontWeight="bold">
-                                Carbs:
-                            </Text>
-                            <Text fontSize="md" fontWeight="bold">
-                                {nutriData.calories.carbCalorie}
+                            <Text marginLeft={1} fontSize="md" fontWeight="medium">
+                                {nutriData.calories.calorie} kCal
                             </Text>
                         </Flex>
                         <Flex>
-                            <Text fontSize="md" fontWeight="bold">
+                            <Text fontSize="md" mr="2" fontWeight="bold">
+                                Carbs: 
+                            </Text>
+                            <Text fontSize="md" fontWeight="medium">
+                                {nutriData.calories.carbCalorie} kCal
+                            </Text>
+                        </Flex>
+                        <Flex>
+                            <Text fontSize="md" mr="2" fontWeight="bold">
                                 Proteins:
                             </Text>
-                            <Text fontSize="md" fontWeight="bold">
-                                {nutriData.calories.protCalorie}
+                            <Text fontSize="md" fontWeight="medium">
+                                {nutriData.calories.protCalorie} kCal
                             </Text>
                         </Flex>
                         <Flex>
-                            <Text fontSize="md" fontWeight="bold">
+                            <Text fontSize="md" mr="2" fontWeight="bold">
                                 Fats:
                             </Text>
-                            <Text fontSize="md" fontWeight="bold">
-                                {nutriData.calories.fatCalorie}
+                            <Text fontSize="md" fontWeight="medium">
+                                {nutriData.calories.fatCalorie} kCal
                             </Text>
                         </Flex>
                         <Flex>
-                            <Text fontSize="md" fontWeight="bold">
+                            <Text fontSize="md" mr="2" fontWeight="bold">
                                 Diet Label:
                             </Text>
-                            <Text fontSize="md" fontWeight="bold">
+                            <Text fontSize="md" fontWeight="medium">
                                 {nutriData.dietLabels}
                             </Text>
                         </Flex>

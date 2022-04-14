@@ -58,11 +58,11 @@ export const Card: React.FC<any> = ({
         >
             Name: {label}
             <br />
-            Calories: {Math.round(nutrients.ENERC_KCAL)}
+            Calories: {Math.round(nutrients.ENERC_KCAL)} kCal
             <br />
-            Protein: {Math.round(nutrients.PROCNT)}
+            Protein: {Math.round(nutrients.PROCNT)} g
             <br />
-            Fat: {Math.round(nutrients.FAT)}
+            Fat: {Math.round(nutrients.FAT)} g
         </Box>
     );
 };
