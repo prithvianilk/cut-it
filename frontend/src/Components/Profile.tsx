@@ -14,6 +14,7 @@ import { useStore } from "../Store/store";
 import { useForm } from "react-hook-form";
 import Auth from "./Auth";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface profileProps {}
 
@@ -27,6 +28,7 @@ const Profile: React.FC<profileProps> = () => {
   const setBudget=useStore((state:any)=>{return state.setBudget});
   const setCalories=useStore((state:any)=>{return state.setCalories});
   const { isOpen: IsOpen, onOpen: OnOpen, onClose: OnClose } = useDisclosure();
+  const navigate = useNavigate();
 
   const [pwdHook, setPwdHook] = useState<string>(pwd);
   const [budgetHook, setBudgetHook] = useState<number>(budget);
@@ -44,7 +46,7 @@ const Profile: React.FC<profileProps> = () => {
       }
       console.log(dataBody);
       await axios.put(`/user/${phno}`,dataBody);
-
+      navigate('/dash');
     } catch (err) {
       console.log(err);
     }

@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CenterSpinner from "../Components/CenterSpinner";
 import axios from "../Utils/axios";
 
 const Leaderboard = () => {
@@ -23,10 +24,11 @@ const Leaderboard = () => {
       setData(res.data);
       setDone(true);
     });
-  }, [isDone]);
-  if (isDone) {
-    console.log(data);
+  }, []);
+  if (!isDone) {
+    return <CenterSpinner/>
   }
+  else
   return (
     <>
       <Box h="20" bgColor="#FAFAFA">

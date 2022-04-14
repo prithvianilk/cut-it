@@ -14,6 +14,7 @@ import axios from "../Utils/axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
+import { useState } from "react";
 
 interface LoginData {
   phone: string;
@@ -25,11 +26,13 @@ const Login = () => {
   const setPwd = useStore((state: any) => state.setPassword);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async (data: any) => {
         console.log(data.phone);
         setPhno(data.phone);
         setPwd(data.password);
-        await axios
+        setIsLoading(true);
+        axios
             .post("http://localhost:3530/auth/login", data)
             .then((res) => {
                 const {data} = res;
@@ -38,6 +41,8 @@ const Login = () => {
                 else
                     navigate("/profile");
 
+            }).finally(()=>{
+              setIsLoading(false);
             });
   };
 
@@ -90,7 +95,7 @@ const Login = () => {
           px="35px"
         >
           <Heading mb="2" textAlign="center">
-            Laddoo
+                    Cut-It
           </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Divider marginBottom="10" />
@@ -162,6 +167,7 @@ const Login = () => {
               _focus={{
                 boxShadow: "transparent",
               }}
+              isLoading={isLoading}
             >
               Login
             </Button>
