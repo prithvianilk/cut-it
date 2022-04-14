@@ -5,6 +5,7 @@ import Profile from "./Components/Profile";
 import { Signup } from "./Components/SignUp";
 import DashBoard from "./Pages/Dashboard";
 import Leaderboard from "./Pages/Leaderboard";
+import { Recommendation } from "./Pages/Recommendation";
 
 const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route path="/dash" element={<DashBoard />} />
         <Route path="/goals" element={<Goal />} />
         <Route path='/leaderboard' element={<Leaderboard/>}/>
+        <Route path='/recom' element={<Recommendation/>}/>
       </Routes>
     </BrowserRouter>
   );
