@@ -43,19 +43,19 @@ const getNutritions = async (item: IFoodItem) => {
 		}),
 	]);
 	let calorie = tasks.reduce(
-		(p, c) => p.concat(c.data.totalNutrientsKCal.ENERC_KCAL.quantity),
+		(p, c) => p + c.data.totalNutrientsKCal.ENERC_KCAL.quantity,
 		[],
 	);
 	let carbCalorie = tasks.reduce(
-		(p, c) => p.concat(c.data.totalNutrientsKCal.CHOCDF_KCAL.quantity),
+		(p, c) => p + c.data.totalNutrientsKCal.CHOCDF_KCAL.quantity,
 		[],
 	);
 	let protCalorie = tasks.reduce(
-		(p, c) => p.concat(c.data.totalNutrientsKCal.PROCNT_KCAL.quantity),
+		(p, c) => p + c.data.totalNutrientsKCal.PROCNT_KCAL.quantity,
 		[],
 	);
 	let fatCalorie = tasks.reduce(
-		(p, c) => p.concat(c.data.totalNutrientsKCal.FAT_KCAL.quantity),
+		(p, c) => p + c.data.totalNutrientsKCal.FAT_KCAL.quantity,
 		[],
 	);
 
@@ -63,7 +63,7 @@ const getNutritions = async (item: IFoodItem) => {
 
 	const dietLabel = mode(dietLabels);
 	const nutritions = {
-		name: nameList,
+		name,
 		category: category,
 		calories: {
 			calorie: calorie,
