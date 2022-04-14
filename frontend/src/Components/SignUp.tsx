@@ -17,14 +17,14 @@ import axios from "../Utils/axios";
 
 export const Signup: React.FC<any> = () => {
   const { register, handleSubmit } = useForm();
-  const setUsername = useStore((state) => state.setUsername);
+  // const setUsername = useStore((state) => state.setUsername);
   const setPhno = useStore((state) => state.setPhoneNumber);
   const setPwd = useStore((state) => state.setPassword);
   const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     console.log(data);
-    setUsername(data.username);
+    // setUsername(data.username);
     setPhno(data.phone);
     setPwd(data.password);
     await axios.post("/auth/signup", data);
