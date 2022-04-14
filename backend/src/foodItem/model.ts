@@ -9,6 +9,8 @@ export interface IFoodItem {
 	total: number;
 	name: string;
 	quantity: number;
+	category: string;
+	sub_category: string;
 }
 
 const foodItemSchema = new Schema({
@@ -20,6 +22,8 @@ const foodItemSchema = new Schema({
 	total: Number,
 	name: String,
 	quantity: Number,
+	category: String,
+	sub_category: String,
 });
 
 export default model<IFoodItem>("foodItem", foodItemSchema);
