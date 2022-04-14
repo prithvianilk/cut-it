@@ -7,6 +7,7 @@ import { MONGO_DB_URI, PORT } from "./constants";
 import orderRouter from "./order/router";
 import otpRouter from "./otp/router";
 import recommendationsRouter from "./recommendations/router";
+import userRouter from "./user/router";
 
 // Connect to MongoDB
 mongoose
@@ -27,6 +28,7 @@ app.use("/otp", otpRouter);
 app.use("/order", orderRouter);
 app.use("/auth", authRouter);
 app.use("/recommendations", recommendationsRouter);
+app.use("/user", userRouter);
 
 app.listen(PORT, () => {
 	console.log(`server started on port :${PORT}.`);

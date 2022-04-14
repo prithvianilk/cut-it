@@ -1,12 +1,8 @@
 import { Bar, BarConfig } from "@ant-design/plots";
-
-export interface IBarGraphData {
-  food: string;
-  value: number;
-}
+import { IGraphData } from "../Interfaces/GraphData";
 
 interface FoodBarChartProps {
-  data: IBarGraphData[];
+  data: IGraphData[];
 }
 
 const FoodBarChart: React.FC<FoodBarChartProps> = ({ data }) => {
@@ -14,7 +10,7 @@ const FoodBarChart: React.FC<FoodBarChartProps> = ({ data }) => {
     data,
     xField: "value",
     yField: "type",
-    seriesField: "type", 
+    seriesField: "type",
     legend: {
       position: "top-left",
     },

@@ -1,9 +1,112 @@
 import { Request, Response } from "express";
-import User from "../auth/model";
+import User from "../user/model";
 import { SWIGGY_ALL_ORDERS } from "../constants";
 import FoodItem, { IFoodItem } from "../foodItem/model";
 import axios from "../utils/axios";
 import { users } from "../utils/values";
+
+export const getAndSaveOrders = async (
+	request: Request,
+	response: Response,
+) => {
+	const { phone } = request.body;
+	let allOrdersSaved = false;
+	let lastOrderId = "";
+	const allItems: IFoodItem[] = [];
+	while (!allOrdersSaved) {
+		const url = `${SWIGGY_ALL_ORDERS}?order_id=${lastOrderId}`;
+		const { data } = await axios.get(url, {
+			headers: {
+				Cookie: users.generate(phone),
+			},
+		});
+		const {
+			data: { orders },
+		} = data;
+		const currentNumberOfOrders = orders.length;
+		if (currentNumberOfOrders === 0) {
+			allOrdersSaved = true;
+		} else {
+			orders.forEach(
+				({
+					order_id,
+					order_time,
+					restaurant_name,
+					restaurant_address,
+					order_items,
+				}: any) => {
+					const orderItems = order_items.map(
+						({ is_veg, total, name, quantity, category_details }: any) => ({
+							order_id,
+							order_time,
+							restaurant_name,
+							restaurant_address,
+							is_veg,
+							total,
+							name,
+							quantity,
+							...category_details,
+						}),
+					);
+					allItems.push(...orderItems);
+				},
+			);
+			lastOrderId = allItems[allItems.length - 1].order_id;
+		}
+	}
+	const foodItemIds = await FoodItem.insertMany(allItems);
+	await User.updateOne(
+		{ phone },
+		{
+			$push: {
+				items: foodItemIds,
+			},
+			$set: {
+				isDataStored: true,
+			},
+		},
+	);
+	response.send({
+		allItems,
+	});
+};
+
+export const getData = async (request: Request, response: Response) => {
+	const { phone } = request.params;
+	const user = await User.findOne({ phone }).populate({ path: "items" }).exec();
+	const frequencyPerFoodName = getFrequencyPerFoodName(user.items);
+	const monthlyData = getMonthlyData(user.items);
+	const restaurantFrequency = getRestaurantFrequency(user.items);
+	const spentValues = getBudgetPieValues(user.items, user.budget);
+	response.send({
+		user,
+		frequencyPerFoodName,
+		monthlyData,
+		restaurantFrequency,
+		spentValues,
+	});
+};
+
+const getFrequencyPerFoodName = (foodItems: IFoodItem[]) => {
+	const frequencyPerFoodName: { [name: string]: number } = {};
+	for (const { name } of foodItems) {
+		if (frequencyPerFoodName[name]) {
+			frequencyPerFoodName[name] += 1;
+		} else {
+			frequencyPerFoodName[name] = 1;
+		}
+	}
+	return Object.keys(frequencyPerFoodName)
+		.sort(
+			(food1: string, food2: string) =>
+				frequencyPerFoodName[food2] - frequencyPerFoodName[food1],
+		)
+		.slice(0, 5)
+		.map((foodName) => ({
+			type: foodName,
+			value: frequencyPerFoodName[foodName],
+		}));
+};
 
 const getMonthlyData = (items: IFoodItem[]) => {
 	let itemFrequency: { [name: string]: number } = {};
@@ -67,163 +170,20 @@ const getRestaurantFrequency = (items: IFoodItem[]) => {
 const getBudgetPieValues = (items: IFoodItem[], monthlyBudget: Number) => {
 	const today: any = new Date();
 	let spent = 0;
-	let budget = monthlyBudget.valueOf();
+	const budget = monthlyBudget.valueOf();
 	items.forEach(function (item) {
 		const orderDate: any = new Date(item.order_time);
 		if (today - orderDate < 60 * 60 * 24 * 30) {
 			spent += item.total;
 		}
 	});
-	if (spent <= budget) {
-		return (spent / (spent + budget)) * 100;
-	} else {
-		return -1;
-	}
-};
 
-export const getOrders = async (request: Request, response: Response) => {
-	const { mobile } = request.body;
-	let allOrdersSaved = false;
-	let lastOrderId = "";
-	const allOrders = [];
-	while (!allOrdersSaved) {
-		const url = `${SWIGGY_ALL_ORDERS}/order_id=${lastOrderId}`;
-		const { data } = await axios.get(url, {
-			headers: {
-				Cookie: users.generate(mobile),
-			},
-		});
-		const orders = data.orders.map(
-			({
-				order_time,
-				restaurant_name,
-				restaurant_address,
-				order_items,
-			}: any) => ({
-				order_time,
-				restaurant_address,
-				restaurant_name,
-				order_items: order_items.map(
-					({ is_veg, total, name, quantity }: any) => ({
-						is_veg,
-						total,
-						name,
-						quantity,
-					}),
-				),
-			}),
-		);
-		const currentNumberOfOrders = orders.length;
-		if (currentNumberOfOrders === 0) {
-			allOrdersSaved = true;
-		} else {
-			lastOrderId = orders[currentNumberOfOrders - 1];
-			allOrders.push(orders);
-		}
-	}
-	response.send({
-		allOrders,
-	});
-};
-
-export const getAndSaveOrders = async (
-	request: Request,
-	response: Response,
-) => {
-	const { mobile } = request.body;
-	let allOrdersSaved = false;
-	let lastOrderId = "";
-	const allItems: IFoodItem[] = [];
-	while (!allOrdersSaved) {
-		const url = `${SWIGGY_ALL_ORDERS}?order_id=${lastOrderId}`;
-		const { data } = await axios.get(url, {
-			headers: {
-				Cookie: users.generate(mobile),
-			},
-		});
-		const {
-			data: { orders },
-		} = data;
-		const currentNumberOfOrders = orders.length;
-		if (currentNumberOfOrders === 0) {
-			allOrdersSaved = true;
-		} else {
-			orders.forEach(
-				({
-					order_id,
-					order_time,
-					restaurant_name,
-					restaurant_address,
-					order_items,
-				}: any) => {
-					const orderItems = order_items.map(
-						({ is_veg, total, name, quantity, category_details }: any) => ({
-							order_id,
-							order_time,
-							restaurant_name,
-							restaurant_address,
-							is_veg,
-							total,
-							name,
-							quantity,
-							...category_details,
-						}),
-					);
-					allItems.push(...orderItems);
-				},
-			);
-			lastOrderId = allItems[allItems.length - 1].order_id;
-		}
-	}
-	const foodItemIds = await FoodItem.insertMany(allItems);
-	await User.updateOne(
-		{ phone: mobile },
+	spent = Math.min(spent, budget);
+	return [
+		{ type: "spent", value: spent },
 		{
-			$push: {
-				items: foodItemIds,
-			},
+			type: "left",
+			value: budget - spent,
 		},
-	);
-	response.send({
-		allItems,
-	});
-};
-
-export const getData = async (request: Request, response: Response) => {
-	const { mobile } = request.params;
-	const user = await User.findOne({ phone: mobile })
-		.populate({ path: "items" })
-		.exec();
-	const frequencyPerFoodName = getFrequencyPerFoodName(user.items);
-	const monthlyData = getMonthlyData(user.items);
-	const restaurantFrequency = getRestaurantFrequency(user.items);
-	const spent = getBudgetPieValues(user.items, user.budget);
-	response.send({
-		user,
-		frequencyPerFoodName,
-		monthlyData,
-		restaurantFrequency,
-		spent,
-	});
-};
-
-const getFrequencyPerFoodName = (foodItems: IFoodItem[]) => {
-	const frequencyPerFoodName: { [name: string]: number } = {};
-	for (const { name } of foodItems) {
-		if (frequencyPerFoodName[name]) {
-			frequencyPerFoodName[name] += 1;
-		} else {
-			frequencyPerFoodName[name] = 1;
-		}
-	}
-	return Object.keys(frequencyPerFoodName)
-		.sort(
-			(food1: string, food2: string) =>
-				frequencyPerFoodName[food2] - frequencyPerFoodName[food1],
-		)
-		.slice(0, 5)
-		.map((foodName) => ({
-			type: foodName,
-			value: frequencyPerFoodName[foodName],
-		}));
+	];
 };

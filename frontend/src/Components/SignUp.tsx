@@ -1,37 +1,72 @@
 import {
-	Box,
-	Button,
-	Divider,
-	Flex,
-	FormControl,
-	FormLabel,
-	Input,
-	Stack,
-	Text
+    Box,
+    Button,
+    Divider,
+    Flex,
+    FormControl,
+    FormLabel,
+    Heading,
+    Input,
+    Spacer,
+    Stack,
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store/store";
-
-interface SignUpData {
-	username: string;
-    ph_num: string;
-    password: string;
-}
+import axios from "../Utils/axios";
 
 export const Signup: React.FC<any> = () => {
-    const {
-        register,
-        handleSubmit,
-    } = useForm();
-    const setPhno = useStore((state) => state.setPhoneNumber);
+  const { register, handleSubmit } = useForm();
+  // const setUsername = useStore((state) => state.setUsername);
+  const setPhno = useStore((state) => state.setPhoneNumber);
+  const setPwd = useStore((state) => state.setPassword);
+  const navigate = useNavigate();
 
-    const onSubmit = async (data: any) => {
-        setPhno(data.ph_num);
-    };
+  const onSubmit = async (data: any) => {
+    console.log(data);
+    // setUsername(data.username);
+    setPhno(data.phone);
+    setPwd(data.password);
+    await axios.post("/auth/signup", data);
+    navigate("/");
+  };
 
     return (
         <>
+            <Flex w="100%" position="absolute">
+                <Spacer />
+                <Heading
+                    justifySelf="center"
+                    size="md"
+                    width="5%"
+                    m="2%"
+                    onClick={() => {
+                        navigate("/");
+                    }}
+                    _hover={{
+                        bg: "white",
+                        color: "#F06575"
+                    }}
+                >
+                    Login
+                </Heading>
+                <Heading
+                    justifySelf="center"
+                    size="md"
+                    onClick={() => {
+                        navigate("/signup");
+                    }}
+                    width="5%"
+                    m="2%"
+                    _hover={{
+                        bg: "white",
+                        color: "#F06575"
+                    }}
+                >
+                    Sign Up
+                </Heading>
+            </Flex>
             <Flex justify="center" flexDir="column">
                 <Box
                     bgColor="#FAFAFA"
@@ -45,13 +80,17 @@ export const Signup: React.FC<any> = () => {
                     my="200"
                     px="35px"
                 >
-                    <Text textAlign="center" fontSize="3xl" fontWeight="medium">
+                    <Heading mb="2" textAlign="center">
                         Sign Up
-                    </Text>
+                    </Heading>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Divider marginBottom="10" />
                         <Stack spacing={4}>
-                            <FormControl id="username" display="flex" isRequired>
+                            <FormControl
+                                id="username"
+                                display="flex"
+                                isRequired
+                            >
                                 <Flex flexDirection="row">
                                     <FormLabel
                                         fontSize="18px"
@@ -73,7 +112,7 @@ export const Signup: React.FC<any> = () => {
                                     />
                                 </Flex>
                             </FormControl>
-                            <FormControl id="ph_num" display="flex" isRequired>
+                            <FormControl id="phone" display="flex" isRequired>
                                 <Flex flexDirection="row">
                                     <FormLabel
                                         fontSize="18px"
@@ -85,10 +124,10 @@ export const Signup: React.FC<any> = () => {
                                     <Input
                                         type="Input"
                                         mb="12"
-                                        {...register("ph_num")}
+                                        {...register("phone")}
                                         w={350}
                                         flex={{ lg: "1", base: "none" }}
-                                        name="ph_num"
+                                        name="phone"
                                         _focus={{
                                             border: "#F06575 solid 2px",
                                         }}
@@ -109,7 +148,7 @@ export const Signup: React.FC<any> = () => {
                                         Password
                                     </FormLabel>
                                     <Input
-                                        type="Input"
+                                        type="password"
                                         mb="12"
                                         w={400}
                                         {...register("password")}
@@ -145,7 +184,7 @@ export const Signup: React.FC<any> = () => {
                                 boxShadow: "transparent",
                             }}
                         >
-                            Login
+                            Sign Up
                         </Button>
                     </form>
                 </Box>
