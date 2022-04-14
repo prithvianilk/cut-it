@@ -13,6 +13,7 @@ import {
   Td,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FoodBarChart from "../Components/BarChart";
 import PieChart from "../Components/PieChart";
 import { IGraphData } from "../Interfaces/GraphData";
@@ -23,6 +24,7 @@ import axios from "../Utils/axios";
 interface DashBoardProps {}
 
 const DashBoard: React.FC<DashBoardProps> = () => {
+  let navigate = useNavigate();
   const phone = Number(useStore((state) => state.phoneNumber));
   const [isDone, setDone] = useState<boolean>(false);
   const [frequentOrders, setFrequentOrders] = useState<IGraphData[]>([]);
@@ -56,9 +58,26 @@ const DashBoard: React.FC<DashBoardProps> = () => {
   return (
     <>
       <Box h="20" bgColor="#FAFAFA">
-        <Heading textAlign="center" my="4">
-          Dashboard
-        </Heading>
+        <Flex flexDir="row" justifyContent="space-between">
+          <Heading textAlign="center" my="4">
+            Dashboard
+          </Heading>
+          <Heading
+            justifySelf="center"
+            size="md"
+            onClick={() => {
+              navigate("/leaderboard");
+            }}
+            width="5%"
+            m="2%"
+            _hover={{
+              bg: "white",
+              color: "#F06575",
+            }}
+          >
+            Leaderboard
+          </Heading>
+        </Flex>
       </Box>
       <Flex flexWrap="wrap" justifyContent="space-around">
         <Box
