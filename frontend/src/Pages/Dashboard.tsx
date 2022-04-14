@@ -1,16 +1,18 @@
 import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Text,
-  Spacer,
-  Table,
-  Th,
-  Thead,
-  Tr,
-  Tbody,
-  Td,
+    Box,
+    Divider,
+    Flex,
+    Heading,
+    Text,
+    Spacer,
+    Table,
+    Th,
+    Thead,
+    Tr,
+    Tbody,
+    Td,
+    IconButton,
+    Image
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +22,7 @@ import { IGraphData } from "../Interfaces/GraphData";
 import { ItemData } from "../Interfaces/ItemData";
 import { useStore } from "../Store/store";
 import axios from "../Utils/axios";
+import LeaderboardPng from '../leaderboard.png';
 
 interface DashBoardProps {}
 
@@ -68,7 +71,6 @@ const DashBoard: React.FC<DashBoardProps> = () => {
             onClick={() => {
               navigate("/leaderboard");
             }}
-            width="5%"
             m="2%"
             _hover={{
               bg: "white",
