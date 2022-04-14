@@ -13,18 +13,38 @@ import axios from "../Utils/axios";
 import { useStore } from "../Store/store";
 import { useForm } from "react-hook-form";
 import Auth from "./Auth";
+import { useState } from "react";
 
 interface profileProps {}
 
 const Profile: React.FC<profileProps> = () => {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit } = useForm();
   const phno=useStore((state:any)=>{return state.phoneNumber});
   const pwd=useStore((state:any)=>{return state.password});
+  const budget=useStore((state:any)=>{return state.monthlyBudget});
+  const calories=useStore((state:any)=>{return state.calories});
+  const setPassword=useStore((state:any)=>{return state.setPassword});
+  const setBudget=useStore((state:any)=>{return state.setBudget});
+  const setCalories=useStore((state:any)=>{return state.setCalories});
   const { isOpen: IsOpen, onOpen: OnOpen, onClose: OnClose } = useDisclosure();
 
+  const [pwdHook, setPwdHook] = useState<string>(pwd);
+  const [budgetHook, setBudgetHook] = useState<number>(budget);
+  const [calHook, setCalHook] = useState<number>(calories);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async () => {
     try {
+      setPassword(pwdHook);
+      setBudget(budgetHook);
+      setCalories(calHook);
+      const dataBody = {
+        budget: budgetHook,
+        calorieBudget: calHook,
+        password: pwdHook
+      }
+      console.log(dataBody);
+      await axios.put(`/user/${phno}`,dataBody);
+
     } catch (err) {
       console.log(err);
     }
@@ -64,8 +84,8 @@ const Profile: React.FC<profileProps> = () => {
               }}
               mb="2"
               type="password"
-              value={pwd}
-              {...register("password")}
+              value={pwdHook}
+              onChange={(e)=>{setPwdHook(e.target.value)}}
             />
           </FormControl>
           <FormControl>
@@ -78,7 +98,22 @@ const Profile: React.FC<profileProps> = () => {
                 border: "#F06575 solid 2px",
               }}
               type="number"
-              {...register("calorie")}
+              value={calHook}
+              onChange={(e)=>{setCalHook(parseInt(e.target.value))}}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel fontSize="lg" mb="5px">
+              Monthly Budget
+            </FormLabel>
+            <Input
+              flex={{ lg: "1", base: "none" }}
+              _focus={{
+                border: "#F06575 solid 2px",
+              }}
+              type="number"
+              value={budgetHook}
+              onChange={(e)=>{setBudgetHook(parseInt(e.target.value))}}
             />
           </FormControl>
           <Flex flexDir="row" justifyContent="space-around">
