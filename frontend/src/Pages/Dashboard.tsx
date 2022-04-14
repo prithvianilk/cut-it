@@ -40,7 +40,7 @@ const DashBoard: React.FC<DashBoardProps> = () => {
     >([]);
     const [spentValues, setSpentValues] = useState<IGraphData[]>([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [url, setUrl] = useState('');
+    const [itemName, setItemName] = useState<string>('');
 
     useEffect(() => {
         const getUserData = async () => {
@@ -64,6 +64,7 @@ const DashBoard: React.FC<DashBoardProps> = () => {
     }, []);
     return (
         <>
+            <NutritionModal itemName={itemName} isOpen={isOpen} onClose={onClose}/>
             <Box h="20" bgColor="#FAFAFA">
                 <Flex flexDir="row" justifyContent="center">
                     <Heading textAlign="center" my="4">
@@ -158,7 +159,10 @@ const DashBoard: React.FC<DashBoardProps> = () => {
                                 {userData.map((item) => {
                                     return (
                                         <Tr onClick={()=>{
-                                            setUrl('')
+                                            setItemName(item.name);
+                                            onOpen();
+                                            console.log('here');
+                                            console.log(isOpen);
                                         }}>
                                             <Td>{item.order_time}</Td>
                                             <Td>{item.name}</Td>
@@ -232,7 +236,6 @@ const DashBoard: React.FC<DashBoardProps> = () => {
                     </Box>
                 </Box>
             </Flex>
-            {/* <NutritionModal isOpen={isOpen} onClose={onClose}/> */}
         </>
     );
 };

@@ -3,7 +3,7 @@ import { getNutritionData, getRecommendations } from "./controller";
 
 const router = Router();
 
-router.get("/nutrition", getNutritionData);
+router.post("/nutrition", getNutritionData);
 router.get("/:phone", getRecommendations);
 
 export default router;
